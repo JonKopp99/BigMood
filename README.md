@@ -1,6 +1,6 @@
 ## Big Mood
 
-Recommendation service that suggests activities and different forms of media consumption depending on the user's mood. 
+▶ Recommendation service that suggests activities and different forms of media consumption depending on the user's mood. 
 
 ## Screen Casts
 
