@@ -66,6 +66,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
         animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
         self.view.window!.layer.add(animation, forKey: nil)
         
         self.dismiss(animated: false, completion: nil) 

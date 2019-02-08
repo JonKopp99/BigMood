@@ -12,7 +12,7 @@ import Firebase
 
 class LaunchVC: UIViewController{
     
-    var headerImage = UIImageView()
+    //var headerImage = UIImageView()
     var greetingLabel = UILabel()
     var greetinglabelView = UIView()
     var feelingLabel = UILabel()
@@ -47,10 +47,10 @@ class LaunchVC: UIViewController{
         feelinglabelView.alpha = 0.0
         self.feelinglabelView.addSubview(feelingLabel)
         self.view.addSubview(feelinglabelView)
-        headerImage.image = #imageLiteral(resourceName: "justLogo")
-        headerImage.contentMode = .scaleAspectFill
-        headerImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 140)
-        self.view.addSubview(headerImage)
+//        headerImage.image = #imageLiteral(resourceName: "justLogo")
+//        headerImage.contentMode = .scaleAspectFill
+//        headerImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 140)
+//        self.view.addSubview(headerImage)
         //uploadTempMoods()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -143,7 +143,12 @@ class LaunchVC: UIViewController{
         }
         let vc = MoodVC()
         vc.mood = stringMood
-        self.present(vc, animated: true, completion: nil)
+        let animation = CATransition()
+        animation.type = .fade
+        animation.subtype = .fromTop
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
     }
     
     func uploadTempMoods()
