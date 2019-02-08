@@ -8,14 +8,15 @@
 
 import Foundation
 import UIKit
-
-
+import Firebase
 class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     var greetingLabel = UILabel()
     var greetinglabelView = UIView()
     var mood = String()
     var moodTB = UITableView()
+    var videoID = String()
+    var articleLink = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
@@ -42,8 +43,10 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.frame = CGRect(x: 10, y: self.view.bounds.height, width: self.view.bounds.width - 20, height: self.view.bounds.height - greetinglabelView.frame.maxY - 5)
         moodTB.separatorStyle = .none
         moodTB.backgroundColor = .clear
+        
+        getTempResources()
         self.view.addSubview(moodTB)
-        moodTB.reloadData()
+        
     }
     
     func moveLabels()
@@ -61,7 +64,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moveLabels()
     }
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
-        self.dismiss(animated: true, completion: nil)
+        let animation = CATransition()
+        animation.type = .push
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil) 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -73,8 +80,10 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         if(indexPath.row == 0)
         {
             cell.video = true
+            cell.videoLink = self.videoID
         }else{
             cell.video = false
+            cell.articleLink = self.articleLink
         }
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
@@ -89,5 +98,20 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             return self.view.bounds.height * 0.6
         }
         return self.view.bounds.height * 0.3
+    }
+    func getTempResources()
+    {
+        let ref = Database.database().reference().child("Moods")
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            if !snapshot.exists() {
+                return }
+            let value = snapshot.value as! [String : AnyObject]
+                let theValue = value as! [String : String]
+                self.articleLink = theValue["articleLink"]!
+                self.videoID = theValue["videoID"]!
+            self.moodTB.reloadData()
+        })
+        
     }
 }
