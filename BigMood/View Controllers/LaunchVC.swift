@@ -21,15 +21,15 @@ class LaunchVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        view.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7921568627, blue: 0.9450980392, alpha: 1)
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-Heavy", size: 40)
+        greetingLabel.font = UIFont(name: "Arial-BoldMT", size: 40)
         greetingLabel.numberOfLines = 1
         greetingLabel.adjustsFontSizeToFitWidth = true
-        greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        greetingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         greetingLabel.text = "How are you feeling today?"
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(greetinglabelView)
@@ -40,9 +40,9 @@ class LaunchVC: UIViewController{
         feelingLabel.textAlignment = .center
         feelingLabel.text = "I feel..."
         feelingLabel.numberOfLines = 1
-        feelingLabel.font = UIFont(name: "AvenirNext-HeavyItalic", size: greetingLabel.font.pointSize)
-        //feelingLabel.adjustsFontSizeToFitWidth = true
-        feelingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        feelingLabel.font = UIFont(name: "Arial-BoldMT", size: 30)
+        feelingLabel.adjustsFontSizeToFitWidth = true
+        feelingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         
         feelinglabelView.alpha = 0.0
         self.feelinglabelView.addSubview(feelingLabel)
@@ -52,6 +52,9 @@ class LaunchVC: UIViewController{
 //        headerImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 140)
 //        self.view.addSubview(headerImage)
         //uploadTempMoods()
+        let swipeUp = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeUp(_:)))
+        swipeUp.direction = UISwipeGestureRecognizer.Direction.up
+        self.view.addGestureRecognizer(swipeUp)
     }
     override func viewWillAppear(_ animated: Bool) {
         moveLabels()
@@ -81,13 +84,13 @@ class LaunchVC: UIViewController{
         while(ctr<6)
         {
             let b = UIButton()
-            b.frame = CGRect(x: theWidth / 2, y: (greetinglabelView.frame.maxY + 60) + CGFloat(45 * ctr), width: theWidth, height: 40.0)
+            b.frame = CGRect(x: theWidth / 2, y: (greetinglabelView.frame.maxY + 80) + CGFloat(45 * ctr), width: theWidth, height: 40.0)
             b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
             b.setTitle(moodString[ctr], for: .normal)
             b.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
             //b.titleLabel?.sizeToFit()
             b.titleLabel?.adjustsFontSizeToFitWidth = true
-            b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.5)
+            b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
             b.layer.cornerRadius = 20
             b.layer.borderWidth = 2
             b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
@@ -97,18 +100,34 @@ class LaunchVC: UIViewController{
             self.view.addSubview(b)
             ctr += 1
         }
+        let unsure = UIButton()
+        
+        unsure.frame = CGRect(x: (theWidth / 2) - 20, y: moods[5].frame.maxY + 100, width: theWidth + 40, height: 40.0)
+        unsure.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        unsure.setTitle("I'm unsure", for: .normal)
+        unsure.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        unsure.titleLabel?.adjustsFontSizeToFitWidth = true
+        unsure.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+        unsure.layer.cornerRadius = 20
+        unsure.layer.borderWidth = 2
+        unsure.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        unsure.alpha = 0.0
+        self.moods.append(unsure)
+        self.view.addSubview(unsure)
         animateButtons(ctr: 0)
         
        
     }
     func animateButtons(ctr: Int)
     {
-        if(ctr <= 6){
+        if(ctr <= 7){
             UIView.animate(withDuration: 0.2, animations: {
                 self.moods[ctr].alpha = 1.0
                 }, completion: { (finished: Bool) in
                     self.animateButtons(ctr: ctr + 1)
             })
+        }else{
+            
         }
     }
     @objc func moodPressed(_ sender: UIButton)
@@ -158,7 +177,12 @@ class LaunchVC: UIViewController{
         ref.child("articleLink").setValue("https://medium.com/@jonathan.kopp/ultimate-health-fitness-e2a1271ad2d8")
         
     }
+    
+     @objc func swipeUp(_ sender: UISwipeGestureRecognizer){
+        
+     }
     override func viewWillDisappear(_ animated: Bool) {
     }
+    
 }
 

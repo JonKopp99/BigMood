@@ -19,7 +19,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var articleLink = String()
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7921568627, blue: 0.9450980392, alpha: 1)
         
         moodTB.dataSource = self
         moodTB.delegate = self
@@ -29,7 +29,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         greetinglabelView.frame = CGRect(x: 0, y: 30, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.view.bounds.width - 20, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-Heavy", size: 40)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's something to help."
