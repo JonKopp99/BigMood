@@ -18,7 +18,15 @@ class LaunchVC: UIViewController{
     var feelingLabel = UILabel()
     var feelinglabelView = UIView()
     var moods = [UIButton()]
-    override func viewDidLoad() {
+    var byAmount = CGFloat()
+    var menuStatus = Bool()
+    var menuView = UIView()
+    var menuHeight = CGFloat()
+    var swipeAlpha = 0.0
+    var timer = Timer()
+    var swipeButton = UIButton()
+    var upDownAlpha = Bool()
+        override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7921568627, blue: 0.9450980392, alpha: 1)
@@ -52,15 +60,26 @@ class LaunchVC: UIViewController{
 //        headerImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 140)
 //        self.view.addSubview(headerImage)
         //uploadTempMoods()
+        menuStatus = false
         let swipeUp = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeUp(_:)))
         swipeUp.direction = UISwipeGestureRecognizer.Direction.up
         self.view.addGestureRecognizer(swipeUp)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeDown(_:)))
+        swipeDown.direction = UISwipeGestureRecognizer.Direction.down
+        self.view.addGestureRecognizer(swipeDown)
+        
+        menuHeight = self.view.bounds.height * 0.125
+        menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: menuHeight)
+        menuView.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7098039216, blue: 0.9450980392, alpha: 1).withAlphaComponent(0.8)
+        menuView.layer.cornerRadius = 20
+        self.view.addSubview(menuView)
+        menuView.alpha = 0.0
+        setUpMenu()
+        scheduledTimerWithTimeInterval()
     }
     override func viewWillAppear(_ animated: Bool) {
         moveLabels()
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        //moveLabels()
     }
     func moveLabels()
     {
@@ -75,7 +94,58 @@ class LaunchVC: UIViewController{
             })
         })
     }
+    func setUpMenu()
+    {
+        let startX = self.menuView.bounds.width / 2 - 25
+        let moodTrackerButton = UIButton()
+        moodTrackerButton.frame = CGRect(x: startX, y: 15, width: 50, height: 50)
+        moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
+        menuView.addSubview(moodTrackerButton)
+        
+        let logInButton = UIButton()
+        logInButton.frame = CGRect(x: startX - 85, y: 15, width: 50, height: 50)
+        logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
+        menuView.addSubview(logInButton)
+        
+        let savedResources = UIButton()
+        savedResources.frame = CGRect(x: startX + 85, y: 15, width: 50, height: 50)
+        savedResources.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
+        menuView.addSubview(savedResources)
+        
+        swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
+        swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
+        self.view.addSubview(swipeButton)
+    }
     
+    func scheduledTimerWithTimeInterval(){
+        if(menuStatus == false)
+        {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true, block: {_ in self.changeAlpha()})
+        }
+    }
+    func changeAlpha()
+    {
+        if(swipeAlpha >= 1.0)
+        {
+            upDownAlpha = true
+        }
+        if(swipeAlpha <= 0.0)
+        {
+            upDownAlpha = false
+        }
+        if(upDownAlpha)
+        {
+            swipeAlpha -= 0.01
+        }else{
+            swipeAlpha += 0.01
+        }
+        if(menuStatus == false)
+        {
+            swipeButton.alpha = CGFloat(swipeAlpha)
+        }else{
+            swipeButton.alpha = 0.0
+        }
+    }
     func setUpButtons()
     {
         let moodString = ["Lonely","Sad","Angry","Unsure","Frustrated","Bored"]
@@ -179,10 +249,60 @@ class LaunchVC: UIViewController{
     }
     
      @objc func swipeUp(_ sender: UISwipeGestureRecognizer){
-        
+        if(menuStatus == false)
+        {
+        byAmount = greetinglabelView.frame.minY - 20
+        UIView.animate(withDuration: 0.5, animations: {
+            self.greetinglabelView.slideYUp(offSet: self.byAmount)
+            self.feelinglabelView.slideYUp(offSet: self.byAmount)
+            self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height - self.menuHeight, width: self.view.bounds.width - 5, height: self.menuHeight)
+            for i in self.moods{
+                i.slideYUp(offSet: self.byAmount)
+            }
+            self.menuView.alpha = 1.0
+            })
+            menuStatus = true
+            
+        }
      }
+    
+    @objc func swipeDown(_ sender: UISwipeGestureRecognizer){
+        
+        if(menuStatus)
+        {
+            byAmount = -byAmount
+            UIView.animate(withDuration: 0.5, animations: {
+                self.greetinglabelView.slideYUp(offSet: self.byAmount)
+                self.feelinglabelView.slideYUp(offSet: self.byAmount)
+                self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: self.menuHeight)
+                for i in self.moods{
+                    i.slideYUp(offSet: self.byAmount)
+                }
+                self.menuView.alpha = 0.0
+            }, completion: { (finished: Bool) in
+                self.menuStatus = false
+            })
+            
+            
+        }
+    }
     override func viewWillDisappear(_ animated: Bool) {
     }
     
 }
+
+extension UIView {
+    
+    func slideYUp(offSet:CGFloat){
+        
+         self.frame = CGRect(x: self.frame.minX, y: self.frame.minY - offSet, width: self.frame.width, height: self.frame.height)
+}
+}
+
+//extension UIButton{
+//    func slideY(offSet: CGFloat)
+//    {
+//        self.frame = CGRect(x: self.frame.minX, y: self.frame.minY - offSet, width: self.frame.width, height: self.frame.height)
+//    }
+//}
 
