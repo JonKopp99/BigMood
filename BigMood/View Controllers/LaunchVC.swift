@@ -12,7 +12,6 @@ import Firebase
 
 class LaunchVC: UIViewController{
     
-    //var headerImage = UIImageView()
     var greetingLabel = UILabel()
     var greetinglabelView = UIView()
     var feelingLabel = UILabel()
@@ -55,11 +54,6 @@ class LaunchVC: UIViewController{
         feelinglabelView.alpha = 0.0
         self.feelinglabelView.addSubview(feelingLabel)
         self.view.addSubview(feelinglabelView)
-//        headerImage.image = #imageLiteral(resourceName: "justLogo")
-//        headerImage.contentMode = .scaleAspectFill
-//        headerImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 140)
-//        self.view.addSubview(headerImage)
-        //uploadTempMoods()
         menuStatus = false
         let swipeUp = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeUp(_:)))
         swipeUp.direction = UISwipeGestureRecognizer.Direction.up
@@ -69,7 +63,7 @@ class LaunchVC: UIViewController{
         swipeDown.direction = UISwipeGestureRecognizer.Direction.down
         self.view.addGestureRecognizer(swipeDown)
         
-        menuHeight = self.view.bounds.height * 0.125
+        menuHeight = self.view.bounds.height * 0.1
         menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: menuHeight)
         menuView.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7098039216, blue: 0.9450980392, alpha: 1).withAlphaComponent(0.8)
         menuView.layer.cornerRadius = 20
@@ -77,6 +71,8 @@ class LaunchVC: UIViewController{
         menuView.alpha = 0.0
         setUpMenu()
         scheduledTimerWithTimeInterval()
+            
+    //uploadTempMoods()
     }
     override func viewWillAppear(_ animated: Bool) {
         moveLabels()
@@ -98,17 +94,17 @@ class LaunchVC: UIViewController{
     {
         let startX = self.menuView.bounds.width / 2 - 25
         let moodTrackerButton = UIButton()
-        moodTrackerButton.frame = CGRect(x: startX, y: 15, width: 50, height: 50)
+        moodTrackerButton.frame = CGRect(x: startX, y: 15, width: 35, height: 35)
         moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
         menuView.addSubview(moodTrackerButton)
         
         let logInButton = UIButton()
-        logInButton.frame = CGRect(x: startX - 85, y: 15, width: 50, height: 50)
+        logInButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
         logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
         menuView.addSubview(logInButton)
         
         let savedResources = UIButton()
-        savedResources.frame = CGRect(x: startX + 85, y: 15, width: 50, height: 50)
+        savedResources.frame = CGRect(x: startX + 65, y: 15, width: 35, height: 35)
         savedResources.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
         menuView.addSubview(savedResources)
         
@@ -242,9 +238,14 @@ class LaunchVC: UIViewController{
     
     func uploadTempMoods()
     {
-        let ref = Database.database().reference().child("Moods")
-        ref.child("videoID").setValue("v1jOJ5fWmYE")
-        ref.child("articleLink").setValue("https://medium.com/@jonathan.kopp/ultimate-health-fitness-e2a1271ad2d8")
+        let moodString = ["Lonely","Sad","Angry","Unsure","Frustrated","Bored"]
+       
+        for i in moodString{
+             let ref = Database.database().reference().child("Moods").child(i)
+            ref.child("videoID").setValue("ZXsQAXx_ao0")
+            ref.child("articleLink").setValue("https://medium.com/thrive-global/how-you-do-anything-is-how-you-do-everything-bc6e264e40ee")
+        }
+       
         
     }
     
@@ -252,7 +253,7 @@ class LaunchVC: UIViewController{
         if(menuStatus == false)
         {
         byAmount = greetinglabelView.frame.minY - 20
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 0.7, animations: {
             self.greetinglabelView.slideYUp(offSet: self.byAmount)
             self.feelinglabelView.slideYUp(offSet: self.byAmount)
             self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height - self.menuHeight, width: self.view.bounds.width - 5, height: self.menuHeight)
@@ -271,7 +272,7 @@ class LaunchVC: UIViewController{
         if(menuStatus)
         {
             byAmount = -byAmount
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.7, animations: {
                 self.greetinglabelView.slideYUp(offSet: self.byAmount)
                 self.feelinglabelView.slideYUp(offSet: self.byAmount)
                 self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: self.menuHeight)
@@ -291,18 +292,4 @@ class LaunchVC: UIViewController{
     
 }
 
-extension UIView {
-    
-    func slideYUp(offSet:CGFloat){
-        
-         self.frame = CGRect(x: self.frame.minX, y: self.frame.minY - offSet, width: self.frame.width, height: self.frame.height)
-}
-}
-
-//extension UIButton{
-//    func slideY(offSet: CGFloat)
-//    {
-//        self.frame = CGRect(x: self.frame.minX, y: self.frame.minY - offSet, width: self.frame.width, height: self.frame.height)
-//    }
-//}
 

@@ -99,11 +99,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         {
             return self.view.bounds.height * 0.6
         }
-        return self.view.bounds.height * 0.3
+        return self.view.bounds.height * 0.4
     }
     func getTempResources()
     {
-        let ref = Database.database().reference().child("Moods")
+        let ref = Database.database().reference().child("Moods").child(mood)
         ref.observeSingleEvent(of: .value, with: { snapshot in
             
             if !snapshot.exists() {
