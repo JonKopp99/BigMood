@@ -28,7 +28,7 @@ class LaunchVC: UIViewController{
         override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        view.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7921568627, blue: 0.9450980392, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.004859850742, green: 0.09608627111, blue: 0.5749928951, alpha: 1)
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
