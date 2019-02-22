@@ -28,7 +28,7 @@ class LaunchVC: UIViewController{
         override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        view.backgroundColor = #colorLiteral(red: 0.004859850742, green: 0.09608627111, blue: 0.5749928951, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
@@ -65,17 +65,18 @@ class LaunchVC: UIViewController{
         
         menuHeight = self.view.bounds.height * 0.1
         menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: menuHeight)
-        menuView.backgroundColor = #colorLiteral(red: 0.3607843137, green: 0.7098039216, blue: 0.9450980392, alpha: 1).withAlphaComponent(0.8)
+        menuView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).withAlphaComponent(0.1)
         menuView.layer.cornerRadius = 20
         self.view.addSubview(menuView)
         menuView.alpha = 0.0
         setUpMenu()
         scheduledTimerWithTimeInterval()
+        moveLabels()
             
     //uploadTempMoods()
     }
     override func viewWillAppear(_ animated: Bool) {
-        moveLabels()
+        
     }
     func moveLabels()
     {
@@ -93,26 +94,42 @@ class LaunchVC: UIViewController{
     func setUpMenu()
     {
         let startX = self.menuView.bounds.width / 2 - 25
+        
+        
         let moodTrackerButton = UIButton()
-        moodTrackerButton.frame = CGRect(x: startX, y: 15, width: 35, height: 35)
+        moodTrackerButton.frame = CGRect(x: startX + 65, y: 15, width: 35, height: 35)
         moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
         menuView.addSubview(moodTrackerButton)
+        
+        let savedResources = UIButton()
+        savedResources.frame = CGRect(x: startX, y: 15, width: 35, height: 35)
+        savedResources.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
+        savedResources.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
+        menuView.addSubview(savedResources)
         
         let logInButton = UIButton()
         logInButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
         logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
         menuView.addSubview(logInButton)
         
-        let savedResources = UIButton()
-        savedResources.frame = CGRect(x: startX + 65, y: 15, width: 35, height: 35)
-        savedResources.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
-        menuView.addSubview(savedResources)
+        
         
         swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
         swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
         self.view.addSubview(swipeButton)
     }
     
+    @objc func savedResourcesPressed()
+    {
+        print("Saved Resources Pressed")
+        let vc = SavedResources()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
     func scheduledTimerWithTimeInterval(){
         if(menuStatus == false)
         {

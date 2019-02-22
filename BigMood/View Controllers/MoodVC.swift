@@ -19,7 +19,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var articleLink = String()
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = #colorLiteral(red: 0.004859850742, green: 0.09608627111, blue: 0.5749928951, alpha: 1)
+        view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
         
         moodTB.dataSource = self
         moodTB.delegate = self
@@ -99,7 +99,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         {
             return self.view.bounds.height * 0.6
         }
-        return self.view.bounds.height * 0.4
+        return self.view.bounds.height * 0.35
     }
     func getTempResources()
     {

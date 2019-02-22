@@ -2,14 +2,15 @@
 import UIKit
 import Foundation
 
-class moodCell: UITableViewCell{
+class SavedCell: UITableViewCell{
     
     var videoView = UIWebView()
     var videoLink = String()
     var articleView = UIWebView()
     var articleLink = String()
     var video = Bool()
-    var saveButton = UIButton()
+    var index = Int()
+    var deleteButton = UIButton()
     override var frame: CGRect {
         get {
             return super.frame
@@ -22,19 +23,19 @@ class moodCell: UITableViewCell{
         }
     }
     override func layoutSubviews() {
-        videoView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height - 35)
+        videoView.frame = CGRect(x: 0, y: 35, width: frame.width, height: frame.height - 35)
         videoView.backgroundColor = .clear
         articleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
-        articleView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height - 35)
+        articleView.frame = CGRect(x: 0, y: 35, width: frame.width, height: frame.height - 35)
         videoView.layer.cornerRadius = 10
         videoView.layer.masksToBounds = true
         articleView.layer.cornerRadius = 10
         articleView.layer.masksToBounds = true
-        saveButton.frame = CGRect(x: 10, y: frame.height - 35, width: 35, height: 35)
-        saveButton.setImage(#imageLiteral(resourceName: "icons8-heart-50"), for: .normal)
-        saveButton.contentMode = .scaleAspectFit
-        saveButton.addTarget(self, action: #selector(savePressed), for: .touchUpInside)
-        self.addSubview(saveButton)
+        deleteButton.frame = CGRect(x: frame.width - 35, y: 0, width: 35, height: 35)
+        deleteButton.setImage(#imageLiteral(resourceName: "icons8-cancel-50 (2)"), for: .normal)
+        deleteButton.contentMode = .scaleAspectFit
+        deleteButton.addTarget(self, action: #selector(deletePressed), for: .touchUpInside)
+        //self.addSubview(deleteButton)
         if(video)
         {
             addSubview(videoView)
@@ -57,26 +58,18 @@ class moodCell: UITableViewCell{
         // load your web request
         videoView.loadRequest(NSURLRequest(url: youtubeURL as URL) as URLRequest)
     }
-    @objc func savePressed()
+    @objc func deletePressed()
     {
-        let heartAnimation = UIImageView()
-        heartAnimation.image = #imageLiteral(resourceName: "icons8-heart-filled-50")
-        heartAnimation.frame = CGRect(x: 27.5, y: frame.height - 17.5, width: 0, height: 0)
-        self.addSubview(heartAnimation)
-        UIView.animate(withDuration: 0.8, animations: {
-            
-            heartAnimation.frame = CGRect(x: 10, y: self.frame.height - 35, width: 35, height: 35)
-            })
         let userDefaults = Foundation.UserDefaults.standard
         var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
         var theArticles = (userDefaults.stringArray(forKey: "SavedArticles") ?? [String]())
         if(video)
         {
-            theVideos.append(videoLink)
+            theVideos.remove(at: index)
             userDefaults.set(theVideos, forKey: "SavedVideos")
             print("Save as video")
         }else{
-            theArticles.append(articleLink)
+            theArticles.remove(at: index)
             userDefaults.set(theArticles, forKey: "SavedArticles")
             print("Save as article")
         }
@@ -93,8 +86,6 @@ class moodCell: UITableViewCell{
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
