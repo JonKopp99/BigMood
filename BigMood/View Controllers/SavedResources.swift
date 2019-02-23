@@ -31,7 +31,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        greetingLabel.text = "Here's your saved resources"
+        greetingLabel.text = "Here's your saved resources."
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
         
@@ -146,7 +146,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             print("Save as article")
         }
         moodTB.deleteRows(at: [sender!.indexPath], with: .fade)
-        //moodTB.reloadData()
+        moodTB.reloadData()
         
         
     }
