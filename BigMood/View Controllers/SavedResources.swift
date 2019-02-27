@@ -16,10 +16,14 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     var moodTB = UITableView()
     var videos = [video]()
     var articles = [article]()
+    var backgroundImage = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
-        
+        backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        backgroundImage.contentMode = .scaleAspectFill
+        self.view.addSubview(backgroundImage)
         moodTB.dataSource = self
         moodTB.delegate = self
         moodTB.register(SavedCell.self, forCellReuseIdentifier: "savedCell")
@@ -32,6 +36,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's your saved resources."
+        greetingLabel.shadowColor = .black
+        greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
         
@@ -84,72 +90,47 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         {
             resourceMode = false
         }
-        let deleteButton = DeleteButton()
         if(resourceMode)
         {
             cell.video = true
             cell.videoLink = videos[indexPath.row].link!
             cell.index = indexPath.row
-            deleteButton.tag = indexPath.row
-            deleteButton.type = true
         }else{
             cell.video = false
             cell.articleLink = articles[indexPath.row - (videos.count)].link!
             cell.index = indexPath.row - (videos.count)
-            deleteButton.tag = indexPath.row - videos.count
-            deleteButton.type = false
         }
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
         cell.layoutMargins = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
         
-        deleteButton.frame = CGRect(x: cell.frame.width + 35, y: 0, width: 35, height: 35)
-        deleteButton.setImage(#imageLiteral(resourceName: "icons8-cancel-50 (2)"), for: .normal)
-        deleteButton.contentMode = .scaleAspectFit
-        deleteButton.indexPath = indexPath
-        deleteButton.addTarget(self, action: #selector(self.deletePressed(_:)), for: .touchUpInside)
-        cell.addSubview(deleteButton)
         //moodTB.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
         return cell
         
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            let userDefaults = Foundation.UserDefaults.standard
+            var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
+            var theArticles = (userDefaults.stringArray(forKey: "SavedArticles") ?? [String]())
+            if(indexPath.row > videos.count)
+            {
+                articles.remove(at: indexPath.row - videos.count)
+                theArticles.remove(at: indexPath.row - videos.count)
+                userDefaults.set(theArticles, forKey: "SavedArticles")
+            }else{
+                theVideos.remove(at: indexPath.row)
+                videos.remove(at: indexPath.row)
+                userDefaults.set(theVideos, forKey: "SavedVideos")
+            }
+            moodTB.deleteRows(at: [indexPath], with: .fade)
         }
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    @objc func deletePressed(_ sender: DeleteButton?)
-    {
-        print("DeleteCalled")
-        let theIndexRow = sender!.tag
-        let video = sender!.type
-        print(theIndexRow)
-        
-        let userDefaults = Foundation.UserDefaults.standard
-        var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
-        var theArticles = (userDefaults.stringArray(forKey: "SavedArticles") ?? [String]())
-        if(video)
-        {
-            theVideos.remove(at: theIndexRow)
-            videos.remove(at: theIndexRow)
-            userDefaults.set(theVideos, forKey: "SavedVideos")
-            print("Save as video")
-        }else{
-            theArticles.remove(at: theIndexRow)
-            articles.remove(at: theIndexRow)
-            userDefaults.set(theArticles, forKey: "SavedArticles")
-            print("Save as article")
-        }
-        moodTB.deleteRows(at: [sender!.indexPath], with: .fade)
-        moodTB.reloadData()
-        
-        
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
     }
@@ -187,9 +168,4 @@ struct article{
 }
 struct video{
     let link: String?
-}
-
-class DeleteButton : UIButton {
-    var type = Bool() //Video if true false = article
-    var indexPath = IndexPath()
 }

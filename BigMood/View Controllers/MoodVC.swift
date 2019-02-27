@@ -17,10 +17,14 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var moodTB = UITableView()
     var videoID = String()
     var articleLink = String()
+    var backgroundImage = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
-        
+        backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        backgroundImage.contentMode = .scaleAspectFill
+        self.view.addSubview(backgroundImage)
         moodTB.dataSource = self
         moodTB.delegate = self
         moodTB.register(moodCell.self, forCellReuseIdentifier: "moodCell")
@@ -33,6 +37,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's something to help."
+        greetingLabel.shadowColor = .black
+        greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
         

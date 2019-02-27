@@ -24,13 +24,18 @@ class NewLaunchVC: UIViewController{
     var timer = Timer()
     var swipeButton = UIButton()
     var upDownAlpha = Bool()
-    var slider = UISlider()
+    var slider = CustomSlider()
     var currentMood = String()
     var b = UIButton()
+    var backgroundImage = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
+        backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        backgroundImage.contentMode = .scaleAspectFill
+        self.view.addSubview(backgroundImage)
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
@@ -40,6 +45,8 @@ class NewLaunchVC: UIViewController{
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         greetingLabel.text = "How are you feeling today?"
+        greetingLabel.shadowColor = .black
+        greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(greetinglabelView)
         
@@ -48,23 +55,28 @@ class NewLaunchVC: UIViewController{
         feelingLabel.frame = CGRect(x: 10, y: 90, width: self.feelinglabelView.bounds.width - 20, height: 50)
         feelingLabel.textAlignment = .center
         feelingLabel.text = "I feel happy!"
+        feelingLabel.shadowColor = .black
+        feelingLabel.shadowOffset = CGSize(width: -2, height: 2)
         currentMood = "Happy"
         feelingLabel.numberOfLines = 1
         feelingLabel.font = UIFont(name: "Arial-BoldMT", size: 30)
         feelingLabel.adjustsFontSizeToFitWidth = true
         feelingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        slider = UISlider(frame:CGRect(x: 20, y: 40, width: self.view.bounds.width - 40, height: 50))
+        slider = CustomSlider(frame:CGRect(x: 20, y: 40, width: self.view.bounds.width - 40, height: 50))
+        slider.trackWidth = 10
         slider.minimumValue = 0
-        slider.maximumValue = 7
+        slider.maximumValue = 6
         slider.isContinuous = true
         slider.tintColor = UIColor.white
+        slider.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        slider.layer.shadowOffset = CGSize(width: -2, height: 2)
         slider.setThumbImage(#imageLiteral(resourceName: "Very Happy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
         slider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
         
         b = UIButton()
-        b.frame = CGRect(x: self.view.bounds.width / 2  - 50, y: 160, width: 100, height: 40.0)
+        b.frame = CGRect(x: self.view.bounds.width / 2  - 75, y: 160, width: 150, height: 40.0)
         b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        b.setTitle("Done", for: .normal)
+        b.setTitle("Ready!", for: .normal)
         b.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         b.titleLabel?.adjustsFontSizeToFitWidth = true
         b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
@@ -89,7 +101,7 @@ class NewLaunchVC: UIViewController{
         
         menuHeight = self.view.bounds.height * 0.1
         menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: menuHeight)
-        menuView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).withAlphaComponent(0.1)
+        menuView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.3)
         menuView.layer.cornerRadius = 20
         self.view.addSubview(menuView)
         menuView.alpha = 0.0
@@ -97,7 +109,7 @@ class NewLaunchVC: UIViewController{
         scheduledTimerWithTimeInterval()
         moveLabels()
         
-        uploadTempMoods()
+        //uploadTempMoods()
         
         
         
@@ -122,20 +134,15 @@ class NewLaunchVC: UIViewController{
             currentMood = "Bored"
         }else if(theValue < 3)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Dizzy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
-            feelingLabel.text = "I feel tired."
-            currentMood = "Tired"
-        }else if(theValue < 4)
-        {
             slider.setThumbImage(#imageLiteral(resourceName: "Sleeping Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel frustrated."
             currentMood = "Frustrated"
-        }else if(theValue < 5)
+        }else if(theValue < 4)
         {
             slider.setThumbImage(#imageLiteral(resourceName: "Angry Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel angry."
             currentMood = "Angry"
-        }else if(theValue < 6)
+        }else if(theValue < 5)
         {
             slider.setThumbImage(#imageLiteral(resourceName: "Crying Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel lonely."
@@ -147,7 +154,6 @@ class NewLaunchVC: UIViewController{
             feelingLabel.text = "I feel Sad..."
             currentMood = "Sad"
         }
-        print(slider.value)
         
     }
     func moveLabels()
@@ -184,13 +190,27 @@ class NewLaunchVC: UIViewController{
         let logInButton = UIButton()
         logInButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
         logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
+        logInButton.addTarget(self, action: #selector(adminButtonPressed), for: .touchUpInside)
         menuView.addSubview(logInButton)
         
         
         
         swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
         swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
+        swipeButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        swipeButton.layer.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(swipeButton)
+    }
+    
+    @objc func adminButtonPressed()
+    {
+        let vc = adminAddResource()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
     }
     
     @objc func savedResourcesPressed()
@@ -272,7 +292,7 @@ class NewLaunchVC: UIViewController{
     @objc func swipeUp(_ sender: UISwipeGestureRecognizer){
         if(menuStatus == false)
         {
-            byAmount = greetinglabelView.frame.minY - 20
+            byAmount = menuView.frame.height
             UIView.animate(withDuration: 0.7, animations: {
                 self.greetinglabelView.slideYUp(offSet: self.byAmount)
                 self.feelinglabelView.slideYUp(offSet: self.byAmount)
@@ -313,7 +333,21 @@ class NewLaunchVC: UIViewController{
     }
     override func viewWillDisappear(_ animated: Bool) {
     }
-    
 }
 
 
+open class CustomSlider : UISlider {
+    @IBInspectable open var trackWidth:CGFloat = 2 {
+        didSet {setNeedsDisplay()}
+    }
+    
+    override open func trackRect(forBounds bounds: CGRect) -> CGRect {
+        let defaultBounds = super.trackRect(forBounds: bounds)
+        return CGRect(
+            x: defaultBounds.origin.x,
+            y: defaultBounds.origin.y + defaultBounds.size.height/2 - trackWidth/2,
+            width: defaultBounds.size.width,
+            height: trackWidth
+        )
+    }
+}

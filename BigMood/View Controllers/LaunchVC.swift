@@ -25,10 +25,15 @@ class LaunchVC: UIViewController{
     var timer = Timer()
     var swipeButton = UIButton()
     var upDownAlpha = Bool()
+    var backgroundImage = UIImageView()
         override func viewDidLoad() {
-        super.viewDidLoad()
+    super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
+        backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        backgroundImage.contentMode = .scaleAspectFill
+        self.view.addSubview(backgroundImage)
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
