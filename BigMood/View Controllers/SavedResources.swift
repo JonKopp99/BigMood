@@ -20,7 +20,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
-        backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
+        backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
@@ -114,7 +114,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             let userDefaults = Foundation.UserDefaults.standard
             var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
             var theArticles = (userDefaults.stringArray(forKey: "SavedArticles") ?? [String]())
-            if(indexPath.row > videos.count)
+            if(indexPath.row >= videos.count)
             {
                 articles.remove(at: indexPath.row - videos.count)
                 theArticles.remove(at: indexPath.row - videos.count)
@@ -137,9 +137,9 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             if(indexPath.row < videos.count)
             {
-                return self.view.bounds.height * 0.35
+                return self.view.bounds.height / 2.5
             }
-        return self.view.bounds.height * 0.6
+        return self.view.bounds.height / 1.5
     }
     func getSavedResources()
     {

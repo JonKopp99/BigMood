@@ -28,6 +28,7 @@ class NewLaunchVC: UIViewController{
     var currentMood = String()
     var b = UIButton()
     var backgroundImage = UIImageView()
+    var admin = true
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -134,7 +135,7 @@ class NewLaunchVC: UIViewController{
             currentMood = "Bored"
         }else if(theValue < 3)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Sleeping Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Dizzy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel frustrated."
             currentMood = "Frustrated"
         }else if(theValue < 4)
@@ -179,6 +180,7 @@ class NewLaunchVC: UIViewController{
         let moodTrackerButton = UIButton()
         moodTrackerButton.frame = CGRect(x: startX + 65, y: 15, width: 35, height: 35)
         moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
+        moodTrackerButton.addTarget(self, action: #selector(moodTrackerPressed), for: .touchUpInside)
         menuView.addSubview(moodTrackerButton)
         
         let savedResources = UIButton()
@@ -190,8 +192,16 @@ class NewLaunchVC: UIViewController{
         let logInButton = UIButton()
         logInButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
         logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
-        logInButton.addTarget(self, action: #selector(adminButtonPressed), for: .touchUpInside)
         menuView.addSubview(logInButton)
+        
+        if(self.admin)
+        {
+            let admin = UIButton()
+            admin.frame = CGRect(x: startX + 95, y: 15, width: 100, height: 35)
+            admin.setTitle("ADMIN", for: .normal)
+            admin.addTarget(self, action: #selector(adminButtonPressed), for: .touchUpInside)
+            menuView.addSubview(admin)
+        }
         
         
         
@@ -205,6 +215,16 @@ class NewLaunchVC: UIViewController{
     @objc func adminButtonPressed()
     {
         let vc = adminAddResource()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
+    @objc func moodTrackerPressed()
+    {
+        let vc = moodTracker()
         let animation = CATransition()
         animation.type = .push
         animation.subtype = .fromBottom
@@ -265,7 +285,32 @@ class NewLaunchVC: UIViewController{
     }
     @objc func moodPressed(_ sender: UIButton)
     {
-        
+        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let userDefaults = Foundation.UserDefaults.standard
+        var ctr = 0
+        while(ctr < moodStrings.count)
+        {
+        if(currentMood == moodStrings[ctr])
+        {
+            print(moodStrings[ctr])
+            let moodDict = (userDefaults.dictionary(forKey: moodStrings[ctr]) ?? [String : Int]())
+            if(moodDict.isEmpty)
+            {
+                let newDict = [moodStrings[ctr] : 1] as [String : Any]
+                userDefaults.set(newDict, forKey: moodStrings[ctr])
+            }else{
+            for (_,value) in moodDict
+            {
+                print(value)
+                let newValue = value as? Int
+                let newDict = [moodStrings[ctr] : newValue! + 1] as [String : Any]
+                userDefaults.set(newDict, forKey: moodStrings[ctr])
+            }
+            }
+            ctr = moodStrings.count
+        }
+            ctr += 1
+        }
         let vc = MoodVC()
         vc.mood = currentMood
         let animation = CATransition()
@@ -274,6 +319,8 @@ class NewLaunchVC: UIViewController{
         animation.duration = 0.6
         self.view.window!.layer.add(animation, forKey: nil)
         self.present(vc, animated: false, completion: nil)
+        
+        
     }
     
     func uploadTempMoods()
