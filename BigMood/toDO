@@ -1,0 +1,12 @@
+
+
+Load more resources
+1.Add article/video dir to database
+2.Add button to load them, have them be randomly picked
+
+Fix Saved Content view
+1.Change cell to be liek the savedCell
+2.Increase table view size
+
+1-2 Add swipe gestures to the tableViews
+
