@@ -110,7 +110,7 @@ class NewLaunchVC: UIViewController{
         scheduledTimerWithTimeInterval()
         moveLabels()
         
-        //uploadTempMoods()
+        //uplaodTemp()
         
         
         
@@ -323,18 +323,7 @@ class NewLaunchVC: UIViewController{
         
     }
     
-    func uploadTempMoods()
-    {
-        let moodString = ["Lonely","Sad","Angry","Happy","Frustrated","Bored", "Tired"]
-        
-        for i in moodString{
-            let ref = Database.database().reference().child("Moods").child(i)
-            ref.child("videoID").setValue("ZXsQAXx_ao0")
-            ref.child("articleLink").setValue("https://medium.com/thrive-global/how-you-do-anything-is-how-you-do-everything-bc6e264e40ee")
-        }
-        
-        
-    }
+
     
     @objc func swipeUp(_ sender: UISwipeGestureRecognizer){
         if(menuStatus == false)
@@ -352,14 +341,13 @@ class NewLaunchVC: UIViewController{
     }
     func uplaodTemp()
     {
-    let moodString = ["Lonely","Sad","Angry","Unsure","Frustrated","Bored"]
+    let moodString = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
     
     for i in moodString{
-    let ref = Database.database().reference().child("Moods").child(i)
-    ref.child("videoID").setValue("ZXsQAXx_ao0")
-    ref.child("articleLink").setValue("https://medium.com/thrive-global/how-you-do-anything-is-how-you-do-everything-bc6e264e40ee")
-        
-    }
+        let ref = Database.database().reference().child("Moods").child(i)
+        ref.child("videos").childByAutoId().setValue("ZXsQAXx_ao0")
+        ref.child("articles").childByAutoId().setValue("https://medium.com/thrive-global/how-you-do-anything-is-how-you-do-everything-bc6e264e40ee")
+        }
     }
     @objc func swipeDown(_ sender: UISwipeGestureRecognizer){
         

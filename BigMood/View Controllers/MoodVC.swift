@@ -17,6 +17,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var moodTB = UITableView()
     var videoID = String()
     var articleLink = String()
+    var videos = [String]()
+    var articles = [String]()
     var backgroundImage = UIImageView()
     var articleFullView = UIView()
     override func viewDidLoad() {
@@ -51,11 +53,39 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.separatorStyle = .none
         moodTB.backgroundColor = .clear
         
-        getTempResources()
-        self.view.addSubview(moodTB)
+        getVideos()
+        getArticles()
+        
+        
+        setUpFooterView()
         
     }
+    func setUpFooterView()
+    {
+        let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40))
+        theView.backgroundColor = .clear
+        let b = UIButton()
+        b.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 0, width: 200, height: 40.0)
+        b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        b.setTitle("Load More", for: .normal)
+        b.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        b.titleLabel?.adjustsFontSizeToFitWidth = true
+        b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+        b.layer.cornerRadius = 20
+        b.layer.borderWidth = 2
+        b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        b.addTarget(self, action:#selector(self.loadMorePressed), for: .touchUpInside)
+        theView.addSubview(b)
+        self.moodTB.tableFooterView = theView
+    }
     
+    @objc func loadMorePressed()
+    {
+        print("Pressed")
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 40
+    }
     func moveLabels()
     {
         UIView.animate(withDuration: 0.7, animations: {
@@ -88,11 +118,17 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "moodCell") as! moodCell
         if(indexPath.row == 0)
         {
+            let index = Int(arc4random_uniform(UInt32(videos.count)))
+            let newVideo = videos[index]
+            self.videoID = newVideo
             cell.video = true
-            cell.videoLink = self.videoID
+            cell.videoLink = newVideo
         }else{
+            let index = Int(arc4random_uniform(UInt32(articles.count)))
+            let newArticle = articles[index]
+            self.articleLink = newArticle
             cell.video = false
-            cell.articleLink = self.articleLink
+            cell.articleLink = newArticle
             let fullscreenButton = UIButton(frame: CGRect(x: cell.frame.width + 50, y: cell.frame.height - 5, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
@@ -150,6 +186,47 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         }
         return self.view.bounds.height / 2.5
     }
+    
+    func getVideos()
+    {
+        let ref = Database.database().reference().child("Moods").child(mood).child("videos")
+        DispatchQueue.main.async {
+            
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            if !snapshot.exists() {
+                return }
+            let value = snapshot.value as! [String : AnyObject]
+            let theValue = value as! [String : String]
+            for (_,value) in theValue
+            {
+                self.videos.append(value)
+            }
+        })
+        }
+    }
+    func getArticles()
+    {
+        
+        let ref = Database.database().reference().child("Moods").child(mood).child("articles")
+        DispatchQueue.main.async {
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            if !snapshot.exists() {
+                return }
+            let value = snapshot.value as! [String : AnyObject]
+            let theValue = value as! [String : String]
+            for (_,value) in theValue
+            {
+                self.articles.append(value)
+            }
+            self.moodTB.reloadData()
+            self.view.addSubview(self.moodTB)
+        })
+            
+        }
+        
+    }
     func getTempResources()
     {
         let ref = Database.database().reference().child("Moods").child(mood)
@@ -162,6 +239,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 self.articleLink = theValue["articleLink"]!
                 self.videoID = theValue["videoID"]!
             self.moodTB.reloadData()
+            
         })
         
     }
