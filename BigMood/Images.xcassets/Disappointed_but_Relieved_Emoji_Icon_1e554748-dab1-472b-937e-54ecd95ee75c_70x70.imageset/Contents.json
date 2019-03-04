@@ -1,0 +1,26 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "Disappointed_but_Relieved_Emoji_Icon_1e554748-dab1-472b-937e-54ecd95ee75c_70x70.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  },
+  "properties" : {
+    "compression-type" : "lossless",
+    "template-rendering-intent" : "original",
+    "preserves-vector-representation" : true
+  }
+}

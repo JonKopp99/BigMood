@@ -1,12 +1,12 @@
 
 import UIKit
 import Foundation
-
+import WebKit
 class moodCell: UITableViewCell{
     
-    var videoView = UIWebView()
+    var videoView = WKWebView()
     var videoLink = String()
-    var articleView = UIWebView()
+    var articleView = WKWebView()
     var articleLink = String()
     var video = Bool()
     var saveButton = UIButton()
@@ -59,7 +59,7 @@ class moodCell: UITableViewCell{
             
             addSubview(articleView)
             //articleView.navigationDelegate = self
-            articleView.loadRequest(request as URLRequest)
+            articleView.load(request as URLRequest)
         }
     }
     
@@ -90,7 +90,7 @@ class moodCell: UITableViewCell{
             let youtubeURL = NSURL(string: "https://www.youtube.com/embed/\(videoID)")
             else { return }
         // load your web request
-        videoView.loadRequest(NSURLRequest(url: youtubeURL as URL) as URLRequest)
+        videoView.load(NSURLRequest(url: youtubeURL as URL) as URLRequest)
     }
     @objc func savePressed()
     {

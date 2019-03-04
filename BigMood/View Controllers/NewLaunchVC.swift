@@ -71,7 +71,7 @@ class NewLaunchVC: UIViewController{
         slider.tintColor = UIColor.white
         slider.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         slider.layer.shadowOffset = CGSize(width: -2, height: 2)
-        slider.setThumbImage(#imageLiteral(resourceName: "Very Happy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+        slider.setThumbImage(#imageLiteral(resourceName: "Emoji_Icon_-_Happy_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
         slider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
         
         b = UIButton()
@@ -125,33 +125,33 @@ class NewLaunchVC: UIViewController{
        // ["Lonely","Sad","Angry","Happy","Frustrated","Bored"]["Lonely","Sad","Angry","Happy","Frustrated","Bored", "Tired"]
         if(theValue < 1)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Very Happy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Emoji_Icon_-_Happy_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel happy!"
             currentMood = "Happy"
         }else if(theValue < 2)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Unamused Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Emoji_Icon_-_unamused_face_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel bored."
             currentMood = "Bored"
         }else if(theValue < 3)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Dizzy Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Dizzy_Emoji_Icon_ac9b8e32-707e-4cae-9ea7-5ad1c136e2d9_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel frustrated."
             currentMood = "Frustrated"
         }else if(theValue < 4)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Angry Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Super_Angry_Face_Emoji_ios10_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel angry."
             currentMood = "Angry"
         }else if(theValue < 5)
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Crying Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Disappointed_but_Relieved_Emoji_Icon_1e554748-dab1-472b-937e-54ecd95ee75c_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel lonely."
             currentMood = "Lonely"
         }
         else
         {
-            slider.setThumbImage(#imageLiteral(resourceName: "Loudly Crying Emoji ").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            slider.setThumbImage(#imageLiteral(resourceName: "Crying_Emoji_Icon_2_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel Sad..."
             currentMood = "Sad"
         }
@@ -189,10 +189,12 @@ class NewLaunchVC: UIViewController{
         savedResources.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
         menuView.addSubview(savedResources)
         
-        let logInButton = UIButton()
-        logInButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
-        logInButton.setImage(#imageLiteral(resourceName: "icons8-shutdown-50"), for: .normal)
-        menuView.addSubview(logInButton)
+        let settingsButton = UIButton()
+        settingsButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
+        settingsButton.setImage(#imageLiteral(resourceName: "icons8-settings-50 (1)"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+        menuView.addSubview(settingsButton)
+        
         
         if(self.admin)
         {
@@ -211,7 +213,16 @@ class NewLaunchVC: UIViewController{
         swipeButton.layer.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(swipeButton)
     }
-    
+    @objc func settingsButtonPressed()
+    {
+        let vc = settingsVC()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
     @objc func adminButtonPressed()
     {
         let vc = adminAddResource()

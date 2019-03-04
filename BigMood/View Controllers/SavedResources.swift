@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import WebKit
 class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     var greetingLabel = UILabel()
@@ -17,6 +17,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     var videos = [video]()
     var articles = [article]()
     var backgroundImage = UIImageView()
+    var articleFullView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
@@ -45,7 +46,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
         self.view.addGestureRecognizer(swipeRight)
         
-        moodTB.frame = CGRect(x: 10, y: -self.view.bounds.height, width: self.view.bounds.width - 20, height: self.view.bounds.height - greetinglabelView.frame.maxY - 5)
+        moodTB.frame = CGRect(x: 0, y: -self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height - greetinglabelView.frame.maxY - 5)
         moodTB.separatorStyle = .none
         moodTB.backgroundColor = .clear
         
@@ -61,7 +62,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             
         }, completion: { (finished: Bool) in
             UIView.animate(withDuration: 0.5, animations: {
-                self.moodTB.frame = CGRect(x: 10, y: self.greetinglabelView.frame.maxY, width: self.view.bounds.width - 20, height: self.view.bounds.height - self.greetinglabelView.frame.maxY - 5)
+                self.moodTB.frame = CGRect(x: 0, y: self.greetinglabelView.frame.maxY, width: self.view.bounds.width, height: self.view.bounds.height - self.greetinglabelView.frame.maxY - 5)
             })
         })
     }
@@ -99,6 +100,14 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.video = false
             cell.articleLink = articles[indexPath.row - (videos.count)].link!
             cell.index = indexPath.row - (videos.count)
+            var fullscreenButton = customArticleButton(frame: CGRect(x: cell.frame.maxX, y: cell.frame.minY - 5, width: 35, height: 35))
+            fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
+            fullscreenButton.contentMode = .scaleAspectFit
+            fullscreenButton.articleLink = cell.articleLink
+            fullscreenButton.tag = indexPath.row
+            fullscreenButton.addTarget(self, action: #selector(fullScreenPressed(_:)), for: .touchUpInside)
+            cell.contentView.addSubview(fullscreenButton)
+            fullscreenButton = customArticleButton()
         }
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
@@ -107,6 +116,44 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //moodTB.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
         return cell
+        
+    }
+    
+    @objc func fullScreenPressed(_ sender: customArticleButton)
+    {
+        let articleLink = sender.articleLink
+        articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
+        let minimizeButton = UIButton()
+        minimizeButton.frame = CGRect(x: self.view.bounds.width - 50, y: 35, width: 35, height: 35)
+        minimizeButton.setImage(#imageLiteral(resourceName: "icons8-compress-50"), for: .normal)
+        minimizeButton.contentMode = .scaleAspectFit
+        minimizeButton.addTarget(self, action: #selector(minimizeButtonPressed(_:)), for: .touchUpInside)
+        
+        let articleWebView = WKWebView()
+        let url = NSURL(string: articleLink)
+        let request = NSURLRequest(url: url! as URL)
+        articleWebView.frame = CGRect(x: 0, y: 80, width: self.view.bounds.width, height: self.view.bounds.height - 80)
+        articleWebView.load(request as URLRequest)
+        articleWebView.backgroundColor = .clear
+        articleFullView.addSubview(articleWebView)
+        self.articleFullView.addSubview(minimizeButton)
+        self.view.addSubview(articleFullView)
+        UIView.animate(withDuration: 1, animations: {
+            self.greetinglabelView.alpha = 0.0
+            self.articleFullView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
+        })
+    }
+    @objc func minimizeButtonPressed(_ sender : UIButton)
+    {
+        UIView.animate(withDuration: 1, animations: {
+            self.greetinglabelView.alpha = 1.0
+            self.articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
+        }, completion: { (finished: Bool) in
+            sender.removeFromSuperview()
+            self.articleFullView.removeFromSuperview()
+            
+        })
+        
         
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -168,4 +215,8 @@ struct article{
 }
 struct video{
     let link: String?
+}
+
+class customArticleButton: UIButton{
+    var articleLink = String()
 }

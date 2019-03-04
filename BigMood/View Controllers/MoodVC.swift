@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Firebase
+import WebKit
 class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     var greetingLabel = UILabel()
@@ -82,6 +83,16 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @objc func loadMorePressed()
     {
         print("Pressed")
+//        let cell1 = moodTB.cellForRow(at: IndexPath(row: 0, section: 0)) as! moodCell
+//        let cell2 = moodTB.cellForRow(at: IndexPath(row: 1, section: 0)) as! moodCell
+//        cell1.videoLink = videos[Int(arc4random_uniform(UInt32(videos.count)))]
+//        cell1.video = true
+//        cell2.video = false
+//        cell2.articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
+//        moodTB.reloadRows(at: [IndexPath(row: 0, section: 0),IndexPath(row: 1, section: 0)], with: .fade)
+        moodTB.reloadData()
+        moodTB.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 40
@@ -129,7 +140,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.articleLink = newArticle
             cell.video = false
             cell.articleLink = newArticle
-            let fullscreenButton = UIButton(frame: CGRect(x: cell.frame.width + 50, y: cell.frame.height - 5, width: 35, height: 35))
+            let fullscreenButton = UIButton(frame: CGRect(x: cell.frame.maxX, y: 0, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)
@@ -152,11 +163,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         minimizeButton.contentMode = .scaleAspectFit
         minimizeButton.addTarget(self, action: #selector(minimizeButtonPressed(_:)), for: .touchUpInside)
         
-        let articleWebView = UIWebView()
+        let articleWebView = WKWebView()
         let url = NSURL(string: articleLink)
         let request = NSURLRequest(url: url! as URL)
         articleWebView.frame = CGRect(x: 0, y: 80, width: self.view.bounds.width, height: self.view.bounds.height - 80)
-        articleWebView.loadRequest(request as URLRequest)
+        articleWebView.load(request as URLRequest)
         articleWebView.backgroundColor = .clear
         articleFullView.addSubview(articleWebView)
         self.articleFullView.addSubview(minimizeButton)

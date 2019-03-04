@@ -102,7 +102,22 @@ class moodTracker: UIViewController{
         
         pieChart.notifyDataSetChanged()
         self.view.addSubview(pieChart)
+        }else{
+            noDataView()
         }
+    }
+    
+    func noDataView()
+    {
+        let label = UILabel(frame: CGRect(x: 10, y: greetingLabel.frame.maxY + 20, width: self.view.bounds.width - 20, height: 100))
+        label.numberOfLines = 2
+        label.text = "No mood data to load."
+        label.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.backgroundColor = .clear
+        self.view.addSubview(label)
     }
     func getColorSet() -> [UIColor]
     {

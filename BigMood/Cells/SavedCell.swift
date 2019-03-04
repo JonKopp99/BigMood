@@ -1,12 +1,12 @@
 
 import UIKit
 import Foundation
-
+import WebKit
 class SavedCell: UITableViewCell{
     
-    var videoView = UIWebView()
+    var videoView = WKWebView()
     var videoLink = String()
-    var articleView = UIWebView()
+    var articleView = WKWebView()
     var articleLink = String()
     var video = Bool()
     var index = Int()
@@ -19,6 +19,8 @@ class SavedCell: UITableViewCell{
             var frame =  newFrame
             frame.origin.y += 8
             frame.size.height -= 4 * 10
+            frame.size.width -= 30
+            frame.origin.x += 15
             super.frame = frame
         }
     }
@@ -46,7 +48,7 @@ class SavedCell: UITableViewCell{
             
             addSubview(articleView)
             //articleView.navigationDelegate = self
-            articleView.loadRequest(request as URLRequest)
+            articleView.load(request as URLRequest)
         }
     }
     
@@ -56,7 +58,7 @@ class SavedCell: UITableViewCell{
             let youtubeURL = NSURL(string: "https://www.youtube.com/embed/\(videoID)")
             else { return }
         // load your web request
-        videoView.loadRequest(NSURLRequest(url: youtubeURL as URL) as URLRequest)
+        videoView.load(NSURLRequest(url: youtubeURL as URL) as URLRequest)
     }
     @objc func deletePressed()
     {
