@@ -8,6 +8,8 @@
 
 ▶ CocoaPods
 
+▶ Charts
+
 
 ## Screen Casts
 
