@@ -31,7 +31,7 @@ class moodTracker: UIViewController{
 //        self.view.addSubview(blur)
         
         
-        greetingLabel.frame = CGRect(x: 10, y: 60, width: self.view.bounds.width - 20, height: 50)
+        greetingLabel.frame = CGRect(x: 30, y: 60, width: self.view.bounds.width - 60, height: 50)
         greetingLabel.textAlignment = .center
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
         greetingLabel.adjustsFontSizeToFitWidth = true
@@ -47,8 +47,24 @@ class moodTracker: UIViewController{
         //moodValues = [1,2,3,4,5,6]
         setUpPieChart()
         //pieChart.update
+        let backButton = UIButton()
+        backButton.frame = CGRect(x: 30, y: greetingLabel.frame.midY - 17.5, width: 35, height: 35)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52").mask(with: #colorLiteral(red: 0.7484758504, green: 1, blue: 1, alpha: 1)), for: .normal)
+        backButton.alpha = 1.0
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        self.view.addSubview(backButton)
     }
     
+    @objc func backButtonPressed()
+    {
+        let animation = CATransition()
+        animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
+    }
     func setUpPieChart()
     {
         if(theMoods.count > 0)

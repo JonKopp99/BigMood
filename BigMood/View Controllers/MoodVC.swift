@@ -34,15 +34,15 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.register(moodCell.self, forCellReuseIdentifier: "moodCell")
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
-        greetinglabelView.frame = CGRect(x: 0, y: 30, width: self.view.bounds.width, height: 60)
-        greetingLabel.frame = CGRect(x: 10, y: 0, width: self.view.bounds.width - 20, height: 50)
-        greetingLabel.textAlignment = .center
+        greetinglabelView.frame = CGRect(x: 45, y: 30, width: self.view.bounds.width - 90, height: 60)
+        greetingLabel.frame = CGRect(x: 0, y: 0, width: self.greetinglabelView.bounds.width, height: 50)
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
-        greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's something to help."
+        greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
+        greetingLabel.textAlignment = .left
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
         
@@ -59,7 +59,29 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         
         setUpFooterView()
+        let backButton = UIButton()
+        var height = greetingLabel.fontSize
+        if(height > 35)
+        {
+            height = 35
+        }
+        print("Height is: ", height)
+        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - 17.5, width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52").mask(with: #colorLiteral(red: 0.7484758504, green: 1, blue: 1, alpha: 1)), for: .normal)
+        backButton.alpha = 1.0
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        self.view.addSubview(backButton)
+    }
+    
+    @objc func backButtonPressed()
+    {
+        let animation = CATransition()
+        animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
         
+        self.dismiss(animated: false, completion: nil)
     }
     func setUpFooterView()
     {
@@ -140,7 +162,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.articleLink = newArticle
             cell.video = false
             cell.articleLink = newArticle
-            let fullscreenButton = UIButton(frame: CGRect(x: cell.frame.maxX, y: 0, width: 35, height: 35))
+            let fullscreenButton = UIButton(frame: CGRect(x: self.view.bounds.width - 65, y: 0, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)

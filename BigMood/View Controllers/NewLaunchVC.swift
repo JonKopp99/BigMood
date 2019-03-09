@@ -91,7 +91,7 @@ class NewLaunchVC: UIViewController{
         self.feelinglabelView.addSubview(slider)
         self.feelinglabelView.addSubview(feelingLabel)
         self.view.addSubview(feelinglabelView)
-        menuStatus = false
+        menuStatus = true
         let swipeUp = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeUp(_:)))
         swipeUp.direction = UISwipeGestureRecognizer.Direction.up
         self.view.addGestureRecognizer(swipeUp)
@@ -100,14 +100,14 @@ class NewLaunchVC: UIViewController{
         swipeDown.direction = UISwipeGestureRecognizer.Direction.down
         self.view.addGestureRecognizer(swipeDown)
         
-        menuHeight = self.view.bounds.height * 0.1
-        menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: menuHeight)
+        menuHeight = 65//self.view.bounds.height * 0.1
+        menuView.frame = CGRect(x: 0, y: self.view.bounds.height - menuHeight, width: self.view.bounds.width, height: menuHeight)
         menuView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.3)
         menuView.layer.cornerRadius = 20
         self.view.addSubview(menuView)
-        menuView.alpha = 0.0
+        menuView.alpha = 1.0
         setUpMenu()
-        scheduledTimerWithTimeInterval()
+        //scheduledTimerWithTimeInterval()
         moveLabels()
         
         //uplaodTemp()
@@ -206,12 +206,12 @@ class NewLaunchVC: UIViewController{
         }
         
         
-        
-        swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
-        swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
-        swipeButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        swipeButton.layer.shadowOffset = CGSize(width: -2, height: 2)
-        self.view.addSubview(swipeButton)
+//
+//        swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
+//        swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
+//        swipeButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+//        swipeButton.layer.shadowOffset = CGSize(width: -2, height: 2)
+//        self.view.addSubview(swipeButton)
     }
     @objc func settingsButtonPressed()
     {
@@ -343,11 +343,11 @@ class NewLaunchVC: UIViewController{
             UIView.animate(withDuration: 0.7, animations: {
                 self.greetinglabelView.slideYUp(offSet: self.byAmount)
                 self.feelinglabelView.slideYUp(offSet: self.byAmount)
-                self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height - self.menuHeight, width: self.view.bounds.width - 5, height: self.menuHeight)
+                self.menuView.frame = CGRect(x: 0, y: self.view.bounds.height - self.menuHeight, width: self.view.bounds.width, height: self.menuHeight)
                 self.menuView.alpha = 1.0
             })
             menuStatus = true
-            
+
         }
     }
     func uplaodTemp()
@@ -361,20 +361,20 @@ class NewLaunchVC: UIViewController{
         }
     }
     @objc func swipeDown(_ sender: UISwipeGestureRecognizer){
-        
+
         if(menuStatus)
         {
             byAmount = -byAmount
             UIView.animate(withDuration: 0.7, animations: {
                 self.greetinglabelView.slideYUp(offSet: self.byAmount)
                 self.feelinglabelView.slideYUp(offSet: self.byAmount)
-                self.menuView.frame = CGRect(x: 2.5, y: self.view.bounds.height, width: self.view.bounds.width - 5, height: self.menuHeight)
+                self.menuView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.menuHeight)
                 self.menuView.alpha = 0.0
             }, completion: { (finished: Bool) in
                 self.menuStatus = false
             })
-            
-            
+
+
         }
     }
     override func viewWillDisappear(_ animated: Bool) {

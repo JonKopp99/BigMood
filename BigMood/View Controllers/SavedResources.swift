@@ -100,7 +100,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.video = false
             cell.articleLink = articles[indexPath.row - (videos.count)].link!
             cell.index = indexPath.row - (videos.count)
-            var fullscreenButton = customArticleButton(frame: CGRect(x: cell.frame.maxX, y: cell.frame.minY - 5, width: 35, height: 35))
+            var fullscreenButton = customArticleButton(frame: CGRect(x: self.view.bounds.width - 65, y: cell.frame.minY - 5, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.articleLink = cell.articleLink
