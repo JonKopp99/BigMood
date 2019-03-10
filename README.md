@@ -12,9 +12,6 @@
 ## Pods
 
 ▶ Firebase
-
-▶ CocoaPods
-
 ▶ Charts
 
 
