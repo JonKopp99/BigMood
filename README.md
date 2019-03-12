@@ -12,8 +12,11 @@
 ## Pods
 
 ▶ Firebase Core
+
 ▶ Firebase Database
+
 ▶ Firebase Auth
+
 ▶ Charts
 
 
