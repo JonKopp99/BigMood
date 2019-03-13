@@ -24,7 +24,7 @@
 
 **Landing Page**
 
-![](https://lh3.googleusercontent.com/g6CD1x8ItpF8jaVeLH6HznN5GhRsdl-2FLZezt22CR8sOpNZxkN9Z4wvZNG4uc5bD3Qp63of0h15)
+![](https://lh3.googleusercontent.com/HhjvompYShCHP11d-GNfxJ95PChUTmbQQuzeGm3tGoSj__6MVvxQEpQobdYGNbXR3QJvVd-Sm0jV)
 
 **Mood View**
 
