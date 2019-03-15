@@ -1,6 +1,6 @@
 ## Big Mood
 
-▶ Recommendation service that suggests activities and different forms of media consumption depending on the user's mood. Also allows users to track their moods, and save content to a list.
+Recommendation service that suggests activities and different forms of media consumption depending on the user's mood. Also allows users to track their moods, and save content to a list.
 
 ## Technologies Used
 
