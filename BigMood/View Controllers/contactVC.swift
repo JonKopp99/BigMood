@@ -11,7 +11,7 @@ import UIKit
 
 class contactVC: UIViewController, UITextViewDelegate{
     var backgroundImage = UIImageView()
-    
+    var greetingLabel = UILabel()
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
@@ -25,7 +25,7 @@ class contactVC: UIViewController, UITextViewDelegate{
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
         self.view.addGestureRecognizer(swipeRight)
         let desctextView = UITextView()
-        desctextView.frame = CGRect(x: 10, y: 70, width: self.view.bounds.width - 20, height: 180)
+        desctextView.frame = CGRect(x: 10, y: 100, width: self.view.bounds.width - 20, height: 180)
         desctextView.delegate = self
         desctextView.textAlignment = .justified
         desctextView.textColor = .white
@@ -55,6 +55,37 @@ class contactVC: UIViewController, UITextViewDelegate{
         contactButton.layer.borderWidth = 2
         contactButton.layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         self.view.addSubview(contactButton)
+        
+        greetingLabel.frame = CGRect(x: 45, y: 50, width: self.view.bounds.width - 90, height: 50)
+        greetingLabel.textAlignment = .center
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
+        greetingLabel.adjustsFontSizeToFitWidth = true
+        greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        greetingLabel.text = "Contact us"
+        greetingLabel.shadowColor = .black
+        greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
+        self.view.addSubview(greetingLabel)
+        let backButton = UIButton()
+        var height = greetingLabel.fontSize
+        if(height > 35)
+        {
+            height = 35
+        }
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.midY - (height/2 + 2.5), width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.alpha = 1.0
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        self.view.addSubview(backButton)
+    }
+    @objc func backButtonPressed()
+    {
+        let animation = CATransition()
+        animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
     }
     @objc func contactPressed()
     {

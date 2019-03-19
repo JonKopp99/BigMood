@@ -19,8 +19,8 @@ class moodCell: UITableViewCell{
             var frame =  newFrame
             frame.origin.y += 8
             frame.size.height -= 4 * 10
-            frame.size.width -= 30
-            frame.origin.x += 15
+            frame.size.width -= 50
+            frame.origin.x += 25
             super.frame = frame
         }
     }

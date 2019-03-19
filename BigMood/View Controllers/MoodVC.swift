@@ -22,6 +22,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     var articles = [String]()
     var backgroundImage = UIImageView()
     var articleFullView = UIView()
+    var backButton = UIButton()
+    var color = UIColor()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
@@ -42,7 +44,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
-        greetingLabel.textAlignment = .left
+        greetingLabel.textAlignment = .center 
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
         
@@ -59,20 +61,32 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         
         setUpFooterView()
-        let backButton = UIButton()
+        backButton = UIButton()
         var height = greetingLabel.fontSize
         if(height > 35)
         {
             height = 35
         }
-        print("Height is: ", height)
-        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - 17.5, width: height, height: height)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52").mask(with: #colorLiteral(red: 0.7484758504, green: 1, blue: 1, alpha: 1)), for: .normal)
+        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - (height / 2 + 2.5), width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         self.view.addSubview(backButton)
     }
     
+    
+    func setScrollIndicatorColor(color: UIColor) {
+        for view in self.moodTB.subviews {
+            if view.isKind(of: UIImageView.self),
+                let imageView = view as? UIImageView,
+                let _ = imageView.image  {
+                imageView.image = nil
+                view.backgroundColor = color
+            }
+        }
+        
+        self.moodTB.flashScrollIndicators()
+    }
     @objc func backButtonPressed()
     {
         let animation = CATransition()
@@ -105,13 +119,13 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     @objc func loadMorePressed()
     {
         print("Pressed")
-//        let cell1 = moodTB.cellForRow(at: IndexPath(row: 0, section: 0)) as! moodCell
-//        let cell2 = moodTB.cellForRow(at: IndexPath(row: 1, section: 0)) as! moodCell
-//        cell1.videoLink = videos[Int(arc4random_uniform(UInt32(videos.count)))]
-//        cell1.video = true
-//        cell2.video = false
-//        cell2.articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
-//        moodTB.reloadRows(at: [IndexPath(row: 0, section: 0),IndexPath(row: 1, section: 0)], with: .fade)
+        let cell1 = tableView(moodTB, cellForRowAt: IndexPath(row: 0, section: 0)) as! moodCell
+        let cell2 = tableView(moodTB, cellForRowAt: IndexPath(row: 1, section: 0)) as! moodCell
+        cell1.videoLink = videos[Int(arc4random_uniform(UInt32(videos.count)))]
+        cell1.video = true
+        cell2.video = false
+        cell2.articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
+        moodTB.reloadRows(at: [IndexPath(row: 0, section: 0),IndexPath(row: 1, section: 0)], with: .fade)
         moodTB.reloadData()
         moodTB.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         
@@ -162,7 +176,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.articleLink = newArticle
             cell.video = false
             cell.articleLink = newArticle
-            let fullscreenButton = UIButton(frame: CGRect(x: self.view.bounds.width - 65, y: 0, width: 35, height: 35))
+            let fullscreenButton = UIButton(frame: CGRect(x: self.view.bounds.width - 85, y: 0, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)
@@ -196,6 +210,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.view.addSubview(articleFullView)
         UIView.animate(withDuration: 1, animations: {
             self.greetinglabelView.alpha = 0.0
+            self.backButton.alpha = 0.0
             self.articleFullView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
             })
     }
@@ -203,6 +218,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     {
         UIView.animate(withDuration: 1, animations: {
             self.greetinglabelView.alpha = 1.0
+            self.backButton.alpha = 1.0
             self.articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
         }, completion: { (finished: Bool) in
             sender.removeFromSuperview()
@@ -215,7 +231,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.row >= 1 )
         {
-            return self.view.bounds.height / 1.5
+            return self.view.bounds.height / 1.2
         }
         return self.view.bounds.height / 2.5
     }
@@ -255,6 +271,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             }
             self.moodTB.reloadData()
             self.view.addSubview(self.moodTB)
+            self.setScrollIndicatorColor(color: self.color)
         })
             
         }

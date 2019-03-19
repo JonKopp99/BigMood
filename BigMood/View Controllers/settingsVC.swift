@@ -15,6 +15,7 @@ class settingsVC: UIViewController{
     var resetTrakerButton = UIButton()
     var aboutButton = UIButton()
     var resetView = UIView()
+    var greetingLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,8 +67,38 @@ class settingsVC: UIViewController{
         let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeRight(_:)))
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
         self.view.addGestureRecognizer(swipeRight)
+        
+        greetingLabel.frame = CGRect(x: 45, y: 50, width: self.view.bounds.width - 90, height: 50)
+        greetingLabel.textAlignment = .center
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
+        greetingLabel.adjustsFontSizeToFitWidth = true
+        greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        greetingLabel.text = "Settings"
+        greetingLabel.shadowColor = .black
+        greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
+        self.view.addSubview(greetingLabel)
+        let backButton = UIButton()
+        var height = greetingLabel.fontSize
+        if(height > 35)
+        {
+            height = 35
+        }
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.midY - (height/2 + 2.5), width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.alpha = 1.0
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        self.view.addSubview(backButton)
     }
-    
+    @objc func backButtonPressed()
+    {
+        let animation = CATransition()
+        animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
+    }
     @objc func contactPressed()
     {
         print("Contact Pressed")

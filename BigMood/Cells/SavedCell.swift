@@ -19,8 +19,8 @@ class SavedCell: UITableViewCell{
             var frame =  newFrame
             frame.origin.y += 8
             frame.size.height -= 4 * 10
-            frame.size.width -= 30
-            frame.origin.x += 15
+            frame.size.width -= 50
+            frame.origin.x += 25
             super.frame = frame
         }
     }
@@ -49,6 +49,11 @@ class SavedCell: UITableViewCell{
             addSubview(articleView)
             //articleView.navigationDelegate = self
             articleView.load(request as URLRequest)
+            let fullscreenButton = UIButton(frame: CGRect(x: frame.width - 35, y: -5, width: 35, height: 35))
+            fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
+            fullscreenButton.contentMode = .scaleAspectFit
+            fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)
+            addSubview(fullscreenButton)
         }
     }
     
@@ -59,6 +64,12 @@ class SavedCell: UITableViewCell{
             else { return }
         // load your web request
         videoView.load(NSURLRequest(url: youtubeURL as URL) as URLRequest)
+    }
+    
+    @objc func fullScreenPressed()
+    {
+        print("Pressed")
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "fullScreen"), object: nil, userInfo: ["url" : articleLink])
     }
     @objc func deletePressed()
     {

@@ -162,13 +162,14 @@ class adminAddResource: UIViewController, UIPickerViewDelegate, UIPickerViewData
         let mood = moodTextField.text!
         print(mood)
         print(resource)
-        var type = "videoID"
+        var type = "videos"
         if(video == false)
         {
-            type = "articleLink"
+            type = "articles"
         }
         let ref = Database.database().reference().child("Moods").child(mood).child(type)
-        ref.setValue(resource)
+        ref.childByAutoId().setValue(resource)
+        //ref.setValue(resource)
     } 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         

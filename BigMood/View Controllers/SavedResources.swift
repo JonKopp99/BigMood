@@ -18,6 +18,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     var articles = [article]()
     var backgroundImage = UIImageView()
     var articleFullView = UIView()
+    var backButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
@@ -31,9 +32,9 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
         greetinglabelView.frame = CGRect(x: 0, y: 30, width: self.view.bounds.width, height: 60)
-        greetingLabel.frame = CGRect(x: 10, y: 0, width: self.view.bounds.width - 20, height: 50)
+        greetingLabel.frame = CGRect(x: 45, y: 0, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's your saved resources."
@@ -41,6 +42,18 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.greetinglabelView.addSubview(greetingLabel)
         self.view.addSubview(self.greetinglabelView)
+        
+        backButton = UIButton()
+        var height = greetingLabel.fontSize
+        if(height > 35)
+        {
+            height = 35
+        }
+        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - (height / 2 + 2.5), width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.alpha = 1.0
+        backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        self.view.addSubview(backButton)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeRight(_:)))
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
@@ -53,8 +66,19 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         getSavedResources()
         self.view.addSubview(moodTB)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(fullScreenPressed), name: NSNotification.Name(rawValue: "fullScreen"), object: nil)
+        
     }
-    
+    @objc func backButtonPressed()
+    {
+        let animation = CATransition()
+        animation.type = .push
+        animation.duration = 0.6
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
+    }
     func moveLabels()
     {
         UIView.animate(withDuration: 0.7, animations: {
@@ -99,15 +123,6 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         }else{
             cell.video = false
             cell.articleLink = articles[indexPath.row - (videos.count)].link!
-            cell.index = indexPath.row - (videos.count)
-            var fullscreenButton = customArticleButton(frame: CGRect(x: self.view.bounds.width - 65, y: cell.frame.minY - 5, width: 35, height: 35))
-            fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
-            fullscreenButton.contentMode = .scaleAspectFit
-            fullscreenButton.articleLink = cell.articleLink
-            fullscreenButton.tag = indexPath.row
-            fullscreenButton.addTarget(self, action: #selector(fullScreenPressed(_:)), for: .touchUpInside)
-            cell.contentView.addSubview(fullscreenButton)
-            fullscreenButton = customArticleButton()
         }
         cell.backgroundColor = .clear
         cell.selectionStyle = .none
@@ -119,9 +134,9 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     }
     
-    @objc func fullScreenPressed(_ sender: customArticleButton)
+    @objc func fullScreenPressed(_ notification: Notification)
     {
-        let articleLink = sender.articleLink
+        
         articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
         let minimizeButton = UIButton()
         minimizeButton.frame = CGRect(x: self.view.bounds.width - 50, y: 35, width: 35, height: 35)
@@ -130,7 +145,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         minimizeButton.addTarget(self, action: #selector(minimizeButtonPressed(_:)), for: .touchUpInside)
         
         let articleWebView = WKWebView()
-        let url = NSURL(string: articleLink)
+        let urlString = notification.userInfo?["url"]
+        let url = NSURL(string: urlString as! String)
         let request = NSURLRequest(url: url! as URL)
         articleWebView.frame = CGRect(x: 0, y: 80, width: self.view.bounds.width, height: self.view.bounds.height - 80)
         articleWebView.load(request as URLRequest)
@@ -140,6 +156,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(articleFullView)
         UIView.animate(withDuration: 1, animations: {
             self.greetinglabelView.alpha = 0.0
+            self.backButton.alpha = 0.0
             self.articleFullView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         })
     }
@@ -147,6 +164,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     {
         UIView.animate(withDuration: 1, animations: {
             self.greetinglabelView.alpha = 1.0
+            self.backButton.alpha = 1.0
             self.articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
         }, completion: { (finished: Bool) in
             sender.removeFromSuperview()
@@ -186,7 +204,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             {
                 return self.view.bounds.height / 2.5
             }
-        return self.view.bounds.height / 1.5
+        return self.view.bounds.height / 1.2
     }
     func getSavedResources()
     {

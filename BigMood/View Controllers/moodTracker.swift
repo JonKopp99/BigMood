@@ -31,9 +31,9 @@ class moodTracker: UIViewController{
 //        self.view.addSubview(blur)
         
         
-        greetingLabel.frame = CGRect(x: 30, y: 60, width: self.view.bounds.width - 60, height: 50)
+        greetingLabel.frame = CGRect(x: 45, y: 50, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Mood Tracker"
@@ -48,8 +48,13 @@ class moodTracker: UIViewController{
         setUpPieChart()
         //pieChart.update
         let backButton = UIButton()
-        backButton.frame = CGRect(x: 30, y: greetingLabel.frame.midY - 17.5, width: 35, height: 35)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52").mask(with: #colorLiteral(red: 0.7484758504, green: 1, blue: 1, alpha: 1)), for: .normal)
+        var height = greetingLabel.fontSize
+        if(height > 35)
+        {
+            height = 35
+        }
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.midY - (height/2 + 2.5), width: height, height: height)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         self.view.addSubview(backButton)
