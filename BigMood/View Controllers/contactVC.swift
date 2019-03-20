@@ -56,9 +56,9 @@ class contactVC: UIViewController, UITextViewDelegate{
         contactButton.layer.borderColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         self.view.addSubview(contactButton)
         
-        greetingLabel.frame = CGRect(x: 45, y: 50, width: self.view.bounds.width - 90, height: 50)
+        greetingLabel.frame = CGRect(x: 45, y: 25, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Contact us"
@@ -66,13 +66,8 @@ class contactVC: UIViewController, UITextViewDelegate{
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(greetingLabel)
         let backButton = UIButton()
-        var height = greetingLabel.fontSize
-        if(height > 35)
-        {
-            height = 35
-        }
-        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.midY - (height/2 + 2.5), width: height, height: height)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         self.view.addSubview(backButton)

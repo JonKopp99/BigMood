@@ -36,11 +36,15 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.register(moodCell.self, forCellReuseIdentifier: "moodCell")
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
-        greetinglabelView.frame = CGRect(x: 45, y: 30, width: self.view.bounds.width - 90, height: 60)
-        greetingLabel.frame = CGRect(x: 0, y: 0, width: self.greetinglabelView.bounds.width, height: 50)
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 40)
+        greetinglabelView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 90)
+        greetingLabel.frame = CGRect(x: 45, y: greetinglabelView.bounds.height/2-10, width: self.greetinglabelView.bounds.width - 90, height: 50)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's something to help."
+        if(mood == "Happy")
+        {
+            greetingLabel.text = "Brighten your day a little more!"
+        }
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
@@ -62,16 +66,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         setUpFooterView()
         backButton = UIButton()
-        var height = greetingLabel.fontSize
-        if(height > 35)
-        {
-            height = 35
-        }
-        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - (height / 2 + 2.5), width: height, height: height)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
-        self.view.addSubview(backButton)
+        self.greetinglabelView.addSubview(backButton)
     }
     
     
@@ -99,7 +98,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     func setUpFooterView()
     {
-        let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40))
+        let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
         theView.backgroundColor = .clear
         let b = UIButton()
         b.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 0, width: 200, height: 40.0)
@@ -113,18 +112,38 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         b.addTarget(self, action:#selector(self.loadMorePressed), for: .touchUpInside)
         theView.addSubview(b)
+        let b2 = UIButton()
+        b2.frame = CGRect(x: self.view.bounds.width / 2  + 105, y: 0, width: 40.0, height: 40.0)
+        b2.setImage(#imageLiteral(resourceName: "icons8-plus-50 (1)"), for: .normal)
+        b2.addTarget(self, action:#selector(self.addButtonPressed), for: .touchUpInside)
+        theView.addSubview(b2)
         self.moodTB.tableFooterView = theView
     }
     
+    @objc func addButtonPressed()
+    {
+        print("Add Button Pressed")
+        let vc = userSubmit()
+        vc.mood = mood
+        let animation = CATransition()
+        animation.type = .fade
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+        
+    }
     @objc func loadMorePressed()
     {
         print("Pressed")
         let cell1 = tableView(moodTB, cellForRowAt: IndexPath(row: 0, section: 0)) as! moodCell
         let cell2 = tableView(moodTB, cellForRowAt: IndexPath(row: 1, section: 0)) as! moodCell
-        cell1.videoLink = videos[Int(arc4random_uniform(UInt32(videos.count)))]
+        videoID = videos[Int(arc4random_uniform(UInt32(videos.count)))]
+        cell1.videoLink = videoID
         cell1.video = true
         cell2.video = false
-        cell2.articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
+        articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
+        cell2.articleLink = articleLink
         moodTB.reloadRows(at: [IndexPath(row: 0, section: 0),IndexPath(row: 1, section: 0)], with: .fade)
         moodTB.reloadData()
         moodTB.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
@@ -165,17 +184,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "moodCell") as! moodCell
         if(indexPath.row == 0)
         {
-            let index = Int(arc4random_uniform(UInt32(videos.count)))
-            let newVideo = videos[index]
-            self.videoID = newVideo
             cell.video = true
-            cell.videoLink = newVideo
+            cell.videoLink = videoID
         }else{
-            let index = Int(arc4random_uniform(UInt32(articles.count)))
-            let newArticle = articles[index]
-            self.articleLink = newArticle
             cell.video = false
-            cell.articleLink = newArticle
+            cell.articleLink = articleLink
             let fullscreenButton = UIButton(frame: CGRect(x: self.view.bounds.width - 85, y: 0, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
@@ -272,6 +285,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.moodTB.reloadData()
             self.view.addSubview(self.moodTB)
             self.setScrollIndicatorColor(color: self.color)
+            self.articleLink = self.articles[Int(arc4random_uniform(UInt32(self.articles.count)))]
+            self.videoID = self.videos[Int(arc4random_uniform(UInt32(self.videos.count)))]
         })
             
         }

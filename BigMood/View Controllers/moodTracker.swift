@@ -17,6 +17,8 @@ class moodTracker: UIViewController{
     var moodValues = [Int]()
     var theMoods = [String]()
     var greetingLabel = UILabel()
+    var resetTrakerButton = UIButton()
+    var resetView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,9 +33,9 @@ class moodTracker: UIViewController{
 //        self.view.addSubview(blur)
         
         
-        greetingLabel.frame = CGRect(x: 45, y: 50, width: self.view.bounds.width - 90, height: 50)
+        greetingLabel.frame = CGRect(x: 45, y: 25, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Mood Tracker"
@@ -48,18 +50,109 @@ class moodTracker: UIViewController{
         setUpPieChart()
         //pieChart.update
         let backButton = UIButton()
-        var height = greetingLabel.fontSize
-        if(height > 35)
-        {
-            height = 35
-        }
-        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.midY - (height/2 + 2.5), width: height, height: height)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         self.view.addSubview(backButton)
+        
+        resetTrakerButton.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: pieChart.frame.maxY + 20, width: 200, height: 40.0)
+        resetTrakerButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        resetTrakerButton.setTitle("Reset", for: .normal)
+        resetTrakerButton.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        resetTrakerButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        resetTrakerButton.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+        resetTrakerButton.layer.cornerRadius = 20
+        resetTrakerButton.layer.borderWidth = 2
+        resetTrakerButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        resetTrakerButton.addTarget(self, action:#selector(self.resetPressed), for: .touchUpInside)
+        if(!moodValues.isEmpty)
+        {
+            self.view.addSubview(resetTrakerButton)
+        }
+    }
+    @objc func resetPressed()
+    {
+        resetView.frame = CGRect(x: 0, y: 100, width: self.view.bounds.width, height: 100)
+        resetView.backgroundColor = .clear
+        let label = UILabel(frame: CGRect(x: 10, y: 0, width: self.view.bounds.width - 20, height: 60))
+        label.numberOfLines = 2
+        label.text = "Press reset to clear your \n Mood Tracker."
+        label.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
+        label.textAlignment = .center
+        label.backgroundColor = .clear
+        resetView.addSubview(label)
+        let b = UIButton()
+        b.frame = CGRect(x: self.view.bounds.width / 2  - 152.5, y: label.frame.maxY, width: 150, height: 40.0)
+        b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        b.setTitle("Reset", for: .normal)
+        b.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        b.titleLabel?.adjustsFontSizeToFitWidth = true
+        b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+        b.layer.cornerRadius = 20
+        b.layer.borderWidth = 2
+        b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        b.addTarget(self, action:#selector(self.yesReset), for: .touchUpInside)
+        self.resetView.addSubview(b)
+        
+        let b2 = UIButton()
+        b2.frame = CGRect(x: self.view.bounds.width / 2 + 2.5, y: label.frame.maxY, width: 150, height: 40.0)
+        b2.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        b2.setTitle("Cancel", for: .normal)
+        b2.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+        b2.titleLabel?.adjustsFontSizeToFitWidth = true
+        b2.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+        b2.layer.cornerRadius = 20
+        b2.layer.borderWidth = 2
+        b2.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        b2.addTarget(self, action:#selector(self.noReset), for: .touchUpInside)
+        self.resetView.addSubview(b2)
+        self.view.addSubview(resetView)
+        resetView.alpha = 0.0
+        UIView.animate(withDuration: 0.5, animations: {
+            self.pieChart.frame = CGRect(x: 10, y: 180, width: self.view.bounds.width - 20, height: self.view.bounds.height / 1.5)
+            self.resetTrakerButton.alpha = 0.0
+            self.resetView.alpha = 1.0
+            })
+        print("Reset Pressed")
+        
+        
     }
     
+    @objc func yesReset()
+    {
+        
+        resetView.removeFromSuperview()
+        resetView = UIView()
+        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let userDefaults = Foundation.UserDefaults.standard
+        var ctr = 0
+        
+        while(ctr < moodStrings.count)
+        {
+            userDefaults.set([moodStrings[ctr], 0], forKey: moodStrings[ctr])
+            ctr += 1
+        }
+        
+        pieChart.removeFromSuperview()
+        noDataView()
+    }
+    @objc func noReset()
+    {
+        
+        resetView.removeFromSuperview()
+        resetView = UIView()
+        moveBack()
+    }
+    func moveBack()
+    {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.pieChart.frame = CGRect(x: 10, y: 80, width: self.view.bounds.width - 20, height: self.view.bounds.height / 1.5)
+            self.resetTrakerButton.alpha = 1.0
+            })
+    }
     @objc func backButtonPressed()
     {
         let animation = CATransition()

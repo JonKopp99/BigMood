@@ -11,6 +11,7 @@ class SavedCell: UITableViewCell{
     var video = Bool()
     var index = Int()
     var deleteButton = UIButton()
+    var fullscreenButton = UIButton()
     override var frame: CGRect {
         get {
             return super.frame
@@ -42,19 +43,22 @@ class SavedCell: UITableViewCell{
         {
             addSubview(videoView)
             loadYoutube(videoID: videoLink)
+            fullscreenButton.alpha = 0.0
+            fullscreenButton.removeFromSuperview()
         }else{
             let url = NSURL(string: articleLink)
             let request = NSURLRequest(url: url! as URL)
-            
+            fullscreenButton.alpha = 1.0
             addSubview(articleView)
             //articleView.navigationDelegate = self
             articleView.load(request as URLRequest)
-            let fullscreenButton = UIButton(frame: CGRect(x: frame.width - 35, y: -5, width: 35, height: 35))
+            fullscreenButton = UIButton(frame: CGRect(x: frame.width - 35, y: -5, width: 35, height: 35))
             fullscreenButton.setImage(#imageLiteral(resourceName: "icons8-fit-to-width-filled-50"), for: .normal)
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)
-            addSubview(fullscreenButton)
+            contentView.addSubview(fullscreenButton)
         }
+        
     }
     
     func loadYoutube(videoID:String) {

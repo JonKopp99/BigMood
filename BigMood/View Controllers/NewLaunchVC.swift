@@ -28,7 +28,7 @@ class NewLaunchVC: UIViewController{
     var currentMood = String()
     var b = UIButton()
     var backgroundImage = UIImageView()
-    var admin = true
+    var admin = false
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -178,19 +178,31 @@ class NewLaunchVC: UIViewController{
         
         
         let moodTrackerButton = UIButton()
-        moodTrackerButton.frame = CGRect(x: startX + 65, y: 15, width: 35, height: 35)
+        moodTrackerButton.frame = CGRect(x: startX , y: 15, width: 35, height: 35)
         moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
         moodTrackerButton.addTarget(self, action: #selector(moodTrackerPressed), for: .touchUpInside)
         menuView.addSubview(moodTrackerButton)
         
+        let journal = UIButton()
+        journal.frame = CGRect(x: startX + 50, y: 15, width: 35, height: 35)
+        journal.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
+        journal.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
+        menuView.addSubview(journal)
+        
         let savedResources = UIButton()
-        savedResources.frame = CGRect(x: startX, y: 15, width: 35, height: 35)
-        savedResources.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
+        savedResources.frame = CGRect(x: startX + 100, y: 15, width: 35, height: 35)
+        savedResources.setImage(#imageLiteral(resourceName: "icons8-heart-50"), for: .normal)
         savedResources.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
         menuView.addSubview(savedResources)
         
+        let chat = UIButton()
+        chat.frame = CGRect(x: startX - 50, y: 15, width: 35, height: 35)
+        chat.setImage(#imageLiteral(resourceName: "icons8-chat-room-48"), for: .normal)
+        chat.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
+        menuView.addSubview(chat)
+        
         let settingsButton = UIButton()
-        settingsButton.frame = CGRect(x: startX - 65, y: 15, width: 35, height: 35)
+        settingsButton.frame = CGRect(x: startX - 100, y: 15, width: 35, height: 35)
         settingsButton.setImage(#imageLiteral(resourceName: "icons8-settings-50 (1)"), for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
         menuView.addSubview(settingsButton)

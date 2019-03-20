@@ -31,10 +31,10 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         moodTB.register(SavedCell.self, forCellReuseIdentifier: "savedCell")
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
-        greetinglabelView.frame = CGRect(x: 0, y: 30, width: self.view.bounds.width, height: 60)
-        greetingLabel.frame = CGRect(x: 45, y: 0, width: self.view.bounds.width - 90, height: 50)
+        greetinglabelView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 90)
+        greetingLabel.frame = CGRect(x: 45, y: greetinglabelView.bounds.height/2-10, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
-        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
+        greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         greetingLabel.text = "Here's your saved resources."
@@ -44,16 +44,11 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(self.greetinglabelView)
         
         backButton = UIButton()
-        var height = greetingLabel.fontSize
-        if(height > 35)
-        {
-            height = 35
-        }
-        backButton.frame = CGRect(x: 5, y: greetinglabelView.frame.midY - (height / 2 + 2.5), width: height, height: height)
-        backButton.setImage(#imageLiteral(resourceName: "icons8-less-than-filled-60"), for: .normal)
+        backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
+        backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
         backButton.alpha = 1.0
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
-        self.view.addSubview(backButton)
+        self.greetinglabelView.addSubview(backButton)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeRight(_:)))
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
@@ -67,7 +62,26 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(moodTB)
         
         NotificationCenter.default.addObserver(self, selector: #selector(fullScreenPressed), name: NSNotification.Name(rawValue: "fullScreen"), object: nil)
+        setUpFooterView()
+    }
+    func setUpFooterView()
+    {
+        let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
+        theView.backgroundColor = .clear
+        self.moodTB.tableFooterView = theView
+    }
+    func setScrollIndicatorColor() {
+        for view in self.moodTB.subviews {
+            if view.isKind(of: UIImageView.self),
+                let imageView = view as? UIImageView,
+                let _ = imageView.image  {
+                imageView.image = nil
+                view.backgroundColor = #colorLiteral(red: 1, green: 0.1240289235, blue: 0.1421327487, alpha: 1)
+            }
+        }
         
+        
+        self.moodTB.flashScrollIndicators()
     }
     @objc func backButtonPressed()
     {
@@ -110,8 +124,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "savedCell") as! SavedCell
         var resourceMode = true //true if video false if article
-        print(indexPath.row)
-        if(indexPath.row >= videos.count)
+        print("Index Row",indexPath.row)
+        if(indexPath.row > videos.count - 1)
         {
             resourceMode = false
         }
@@ -129,7 +143,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.separatorInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
         cell.layoutMargins = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
         
-        //moodTB.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+        setScrollIndicatorColor()
         return cell
         
     }
@@ -224,6 +238,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         print(articles.count)
         print(videos.count)
         self.moodTB.reloadData()
+        setScrollIndicatorColor()
     }
 }
 
