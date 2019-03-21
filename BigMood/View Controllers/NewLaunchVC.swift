@@ -102,8 +102,8 @@ class NewLaunchVC: UIViewController{
         
         menuHeight = 65//self.view.bounds.height * 0.1
         menuView.frame = CGRect(x: 0, y: self.view.bounds.height - menuHeight, width: self.view.bounds.width, height: menuHeight)
-        menuView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.3)
-        menuView.layer.cornerRadius = 20
+        menuView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.5)
+        //menuView.layer.cornerRadius = 10
         self.view.addSubview(menuView)
         menuView.alpha = 1.0
         setUpMenu()
@@ -179,30 +179,32 @@ class NewLaunchVC: UIViewController{
         
         let moodTrackerButton = UIButton()
         moodTrackerButton.frame = CGRect(x: startX , y: 15, width: 35, height: 35)
-        moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-stones-50"), for: .normal)
+        moodTrackerButton.setImage(#imageLiteral(resourceName: "icons8-lol-50"), for: .normal)
         moodTrackerButton.addTarget(self, action: #selector(moodTrackerPressed), for: .touchUpInside)
         menuView.addSubview(moodTrackerButton)
         
         let journal = UIButton()
-        journal.frame = CGRect(x: startX + 50, y: 15, width: 35, height: 35)
+        journal.frame = CGRect(x: startX - 60, y: 15, width: 35, height: 35)
         journal.setImage(#imageLiteral(resourceName: "icons8-spiral-bound-booklet-50"), for: .normal)
-        journal.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
+        journal.addTarget(self, action: #selector(journalPressed), for: .touchUpInside)
         menuView.addSubview(journal)
         
+        let chat = UIButton()
+        chat.frame = CGRect(x: startX + 120, y: 15, width: 35, height: 35)
+        chat.setImage(#imageLiteral(resourceName: "icons8-speech-bubble-50"), for: .normal)
+        chat.addTarget(self, action: #selector(chatButtonPressed), for: .touchUpInside)
+        menuView.addSubview(chat)
+        
         let savedResources = UIButton()
-        savedResources.frame = CGRect(x: startX + 100, y: 15, width: 35, height: 35)
-        savedResources.setImage(#imageLiteral(resourceName: "icons8-heart-50"), for: .normal)
+        savedResources.frame = CGRect(x: startX + 60, y: 15, width: 35, height: 35)
+        savedResources.setImage(#imageLiteral(resourceName: "icons8-romance-50"), for: .normal)
         savedResources.addTarget(self, action: #selector(savedResourcesPressed), for: .touchUpInside)
         menuView.addSubview(savedResources)
         
-        let chat = UIButton()
-        chat.frame = CGRect(x: startX - 50, y: 15, width: 35, height: 35)
-        chat.setImage(#imageLiteral(resourceName: "icons8-chat-room-48"), for: .normal)
-        chat.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
-        menuView.addSubview(chat)
+        
         
         let settingsButton = UIButton()
-        settingsButton.frame = CGRect(x: startX - 100, y: 15, width: 35, height: 35)
+        settingsButton.frame = CGRect(x: startX - 120, y: 15, width: 35, height: 35)
         settingsButton.setImage(#imageLiteral(resourceName: "icons8-settings-50 (1)"), for: .normal)
         settingsButton.addTarget(self, action: #selector(settingsButtonPressed), for: .touchUpInside)
         menuView.addSubview(settingsButton)
@@ -228,6 +230,26 @@ class NewLaunchVC: UIViewController{
     @objc func settingsButtonPressed()
     {
         let vc = settingsVC()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
+    @objc func chatButtonPressed()
+    {
+        let vc = chatVC()
+        let animation = CATransition()
+        animation.type = .push
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
+    @objc func journalPressed()
+    {
+        let vc = journalTB()
         let animation = CATransition()
         animation.type = .push
         animation.subtype = .fromBottom

@@ -87,8 +87,8 @@ class settingsVC: UIViewController{
     @objc func backButtonPressed()
     {
         let animation = CATransition()
-        animation.type = .push
-        animation.duration = 0.6
+        animation.type = .fade
+        animation.duration = 0.4
         animation.subtype = .fromLeft
         self.view.window!.layer.add(animation, forKey: nil)
         
@@ -185,8 +185,8 @@ class settingsVC: UIViewController{
     }
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
-        animation.type = .push
-        animation.duration = 0.6
+        animation.type = .fade
+        animation.duration = 0.4
         animation.subtype = .fromLeft
         self.view.window!.layer.add(animation, forKey: nil)
         

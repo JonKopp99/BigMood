@@ -86,8 +86,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func backButtonPressed()
     {
         let animation = CATransition()
-        animation.type = .push
-        animation.duration = 0.6
+        animation.type = .fade
+        animation.duration = 0.4
         animation.subtype = .fromLeft
         self.view.window!.layer.add(animation, forKey: nil)
         
@@ -109,8 +109,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
-        animation.type = .push
-        animation.duration = 0.6
+        animation.type = .fade
+        animation.duration = 0.4
         animation.subtype = .fromLeft
         self.view.window!.layer.add(animation, forKey: nil)
         
@@ -122,7 +122,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "savedCell") as! SavedCell
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "savedCell") as! SavedCell
+        let cell = SavedCell()
         var resourceMode = true //true if video false if article
         print("Index Row",indexPath.row)
         if(indexPath.row > videos.count - 1)
