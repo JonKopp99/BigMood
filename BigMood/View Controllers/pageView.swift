@@ -15,6 +15,7 @@ class pageView: UIViewController, UITextViewDelegate{
     var currentDate = customDate()
     var dateAsString = String()
     var textView = UITextView()
+    var doneButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
@@ -25,7 +26,7 @@ class pageView: UIViewController, UITextViewDelegate{
         let backgroundView = UIView(frame: backgroundImage.frame)
         backgroundView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.8)
         self.view.addSubview(backgroundView)
-        greetingLabel.frame = CGRect(x: 45, y: 25, width: self.view.bounds.width - 90, height: 50)
+        greetingLabel.frame = CGRect(x: 50, y: 25, width: self.view.bounds.width - 100, height: 50)
         greetingLabel.textAlignment = .center
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
         greetingLabel.adjustsFontSizeToFitWidth = true
@@ -35,6 +36,13 @@ class pageView: UIViewController, UITextViewDelegate{
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(greetingLabel)
+        
+        doneButton.frame = CGRect(x: self.greetingLabel.frame.maxX - 5, y: 30, width: 50, height: 40)
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.setTitleColor(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), for: .normal)
+        doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
+        
+        
         let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeRight(_:)))
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
         self.view.addGestureRecognizer(swipeRight)
@@ -67,8 +75,16 @@ class pageView: UIViewController, UITextViewDelegate{
         self.view.addGestureRecognizer(swipeDown)
         textView.addGestureRecognizer(swipeDown)
     }
+    
+    @objc func donePressed()
+    {
+        saveText()
+        doneButton.removeFromSuperview()
+        textView.resignFirstResponder()
+    }
     @objc func swipeDown(_ sender: UISwipeGestureRecognizer){
         saveText()
+        doneButton.removeFromSuperview()
         textView.resignFirstResponder()
     }
     @objc func backButtonPressed()
@@ -104,12 +120,14 @@ class pageView: UIViewController, UITextViewDelegate{
         return theDates
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
+        self.view.addSubview(doneButton)
         if(textView.text == "Preview Text...")
         {
             textView.text = ""
         }
     }
     func textViewDidEndEditing(_ textView: UITextView) {
+        doneButton.removeFromSuperview()
         if(textView.text == "")
         {
             textView.text = "Preview Text..."

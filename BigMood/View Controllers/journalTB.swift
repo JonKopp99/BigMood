@@ -65,7 +65,7 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         self.view.addSubview(moodTB)
         //clearDefaults()
         getTheDates()
-        insertDummyData()
+        //insertDummyData()
         moodTB.reloadData()
         if(!pages.isEmpty){
         if(!(stripDate(theDate: pages[0]) == stripDate(theDate: getCurrentDate())))
@@ -197,7 +197,16 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         var ctr = 19
         while(ctr > 0)
         {
-            pages.append(customDate(day: "\(ctr)", month: "March", year: "2019"))
+            if(Int.random(in: 0..<2) == 1)
+            {
+                let tempDate = customDate(day: "\(ctr)", month: "March", year: "2019")
+                let userDefaults = Foundation.UserDefaults.standard
+                var theDates = (userDefaults.stringArray(forKey: "pages") ?? [String]())
+                theDates.append(self.stripDate(theDate: tempDate))
+                userDefaults.set(theDates, forKey: "pages")
+            }
+            
+            //pages.append(customDate(day: "\(ctr)", month: "March", year: "2019"))
             ctr -= 1
         }
     }

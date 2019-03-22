@@ -14,7 +14,6 @@ class settingsVC: UIViewController{
     var contactButton = UIButton()
     var resetTrakerButton = UIButton()
     var aboutButton = UIButton()
-    var resetView = UIView()
     var greetingLabel = UILabel()
     
     override func viewDidLoad() {
@@ -52,14 +51,14 @@ class settingsVC: UIViewController{
         
         resetTrakerButton.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: self.view.bounds.height / 2, width: 200, height: 40.0)
         resetTrakerButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        resetTrakerButton.setTitle("Reset", for: .normal)
+        resetTrakerButton.setTitle("How to use", for: .normal)
         resetTrakerButton.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
         resetTrakerButton.titleLabel?.adjustsFontSizeToFitWidth = true
         resetTrakerButton.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
         resetTrakerButton.layer.cornerRadius = 20
         resetTrakerButton.layer.borderWidth = 2
         resetTrakerButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        resetTrakerButton.addTarget(self, action:#selector(self.resetPressed), for: .touchUpInside)
+        //resetTrakerButton.addTarget(self, action:#selector(self.resetPressed), for: .touchUpInside)
         
         self.view.addSubview(aboutButton)
         self.view.addSubview(resetTrakerButton)
@@ -118,71 +117,6 @@ class settingsVC: UIViewController{
         self.present(vc, animated: false, completion: nil)
     }
     
-    @objc func resetPressed()
-    {
-        print("Reset Pressed")
-        resetView.frame = CGRect(x: 0, y: resetTrakerButton.frame.maxY, width: self.view.bounds.width, height: self.view.bounds.height - resetTrakerButton.frame.maxY)
-        resetView.backgroundColor = .clear
-        let label = UILabel(frame: CGRect(x: 10, y: 0, width: self.view.bounds.width - 20, height: 100))
-        label.numberOfLines = 2
-        label.text = "Press reset to clear your \n Mood Tracker."
-        label.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        label.textColor = .white
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        label.backgroundColor = .clear
-        resetView.addSubview(label)
-        let b = UIButton()
-        b.frame = CGRect(x: self.view.bounds.width / 2  - 152.5, y: label.frame.maxY, width: 150, height: 40.0)
-        b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        b.setTitle("Reset", for: .normal)
-        b.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        b.titleLabel?.adjustsFontSizeToFitWidth = true
-        b.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
-        b.layer.cornerRadius = 20
-        b.layer.borderWidth = 2
-        b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        b.addTarget(self, action:#selector(self.yesReset), for: .touchUpInside)
-        self.resetView.addSubview(b)
-        
-        let b2 = UIButton()
-        b2.frame = CGRect(x: self.view.bounds.width / 2 + 2.5, y: label.frame.maxY, width: 150, height: 40.0)
-        b2.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        b2.setTitle("Cancel", for: .normal)
-        b2.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        b2.titleLabel?.adjustsFontSizeToFitWidth = true
-        b2.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
-        b2.layer.cornerRadius = 20
-        b2.layer.borderWidth = 2
-        b2.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        b2.addTarget(self, action:#selector(self.noReset), for: .touchUpInside)
-        self.resetView.addSubview(b2)
-        self.view.addSubview(resetView)
-        
-        
-    }
-    
-    @objc func yesReset()
-    {
-        
-        resetView.removeFromSuperview()
-        resetView = UIView()
-        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
-        let userDefaults = Foundation.UserDefaults.standard
-        var ctr = 0
-        
-        while(ctr < moodStrings.count)
-        {
-            userDefaults.set([moodStrings[ctr], 0], forKey: moodStrings[ctr])
-            ctr += 1
-        }
-    }
-    @objc func noReset()
-    {
-        
-        resetView.removeFromSuperview()
-        resetView = UIView()
-    }
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
         animation.type = .fade

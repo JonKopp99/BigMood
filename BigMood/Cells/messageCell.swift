@@ -9,12 +9,33 @@
 import UIKit
 import Foundation
 class messageCell: UITableViewCell{
+    var sender = Bool()
+    var msg = UITextView()
     override func layoutSubviews() {
-       
+       msg.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+        msg.isEditable = false
+        msg.backgroundColor = .clear
+        if(sender)
+        {
+            msg.frame = CGRect(x: frame.width * 0.4, y: 0, width: frame.width - frame.width * 0.4 - 10, height: frame.height)
+            msg.sizeToFit()
+            msg.textAlignment = .right
+            msg.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        }else{
+            msg.frame = CGRect(x: 10, y: 0, width: frame.width - frame.width * 0.4 - 10, height: frame.height)
+            msg.sizeToFit()
+            msg.textAlignment = .left
+            msg.textColor = #colorLiteral(red: 0.2392156863, green: 0.6745098039, blue: 0.968627451, alpha: 1)
+        }
+        //msg.adjustsFontSizeToFitWidth = true
+        
+        
+        addSubview(msg)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

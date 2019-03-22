@@ -118,8 +118,34 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         b2.addTarget(self, action:#selector(self.addButtonPressed), for: .touchUpInside)
         theView.addSubview(b2)
         self.moodTB.tableFooterView = theView
+        
+        if(mood == "Sad")
+        {
+            theView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
+            let b3 = UIButton()
+            b3.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 50, width: 200, height: 40.0)
+            b3.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+            b3.setTitle("Immediate Help", for: .normal)
+            b3.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+            b3.titleLabel?.adjustsFontSizeToFitWidth = true
+            b3.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+            b3.layer.cornerRadius = 20
+            b3.layer.borderWidth = 2
+            b3.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+            b3.addTarget(self, action:#selector(self.immediateHelpPressed), for: .touchUpInside)
+            theView.addSubview(b3)
+        }
     }
-    
+    @objc func immediateHelpPressed()
+    {
+        let vc = immediateHelpVC()
+        let animation = CATransition()
+        animation.type = .fade
+        animation.subtype = .fromBottom
+        animation.duration = 0.6
+        self.view.window!.layer.add(animation, forKey: nil)
+        self.present(vc, animated: false, completion: nil)
+    }
     @objc func addButtonPressed()
     {
         print("Add Button Pressed")
@@ -150,7 +176,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 40
+        if(mood == "Sad")
+        {
+            return 100
+        }
+        return 50
     }
     func moveLabels()
     {
