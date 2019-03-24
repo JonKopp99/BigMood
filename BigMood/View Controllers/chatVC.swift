@@ -17,9 +17,16 @@ class chatVC: UIViewController{
     var chatButton = UIButton()
     var id = String()
     var timer = Timer()
+    var label = UILabel()
     var koiImage = UIImageView()
+    var status = Bool()//True if timer is running else False
+    var timeRunning = Int()
+    override func viewWillAppear(_ animated: Bool) {
+        checkIfInChatAlready()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
@@ -49,13 +56,13 @@ class chatVC: UIViewController{
         backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         self.view.addSubview(backButton)
         
-        descLabel.frame = CGRect(x: 45, y: greetingLabel.frame.maxY + 20, width: self.view.bounds.width - 90, height: 50)
+        descLabel.frame = CGRect(x: 45, y: greetingLabel.frame.maxY + 20, width: self.view.bounds.width - 90, height: 60)
         descLabel.textAlignment = .center
         descLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
         descLabel.adjustsFontSizeToFitWidth = true
         descLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        
-        descLabel.text = "Press start to search an anonymous chat!"
+        descLabel.numberOfLines = 2
+        descLabel.text = "Press start to search for an anonymous chat!"
         descLabel.shadowColor = .black
         descLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(descLabel)
@@ -74,18 +81,35 @@ class chatVC: UIViewController{
         self.view.addSubview(chatButton)
     }
     
+    func checkIfInChatAlready()
+    {
+        let userDefaults = Foundation.UserDefaults.standard
+        let theid = (userDefaults.string(forKey: "myID") ?? String())
+        let chatroom = (userDefaults.string(forKey: "chatRoom") ?? String())
+        if(chatroom.isEmpty || theid.isEmpty)
+        {
+            print("Not in chat")
+            return
+        }else{
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
+    
     func exitQueue()
     {
-        timer.invalidate()
-        let ref = Database.database().reference().child("Queue").child(id)
-        ref.removeValue()
+        if(status)
+        {
+            timer.invalidate()
+            let ref = Database.database().reference().child("Queue").child(id)
+            ref.setValue([])
+        }
     }
     @objc func chatPressed()
     {
         print("Pressed")
         
-        let label = UILabel()
-        label.frame = CGRect(x: 45, y: self.chatButton.frame.midY, width: self.view.bounds.width - 90, height: 50)
+        label = UILabel()
+        label.frame = CGRect(x: 45, y: self.greetingLabel.frame.maxY + 20, width: self.view.bounds.width - 90, height: 50)
         descLabel.removeFromSuperview()
         chatButton.removeFromSuperview()
         label.textAlignment = .center
@@ -96,7 +120,7 @@ class chatVC: UIViewController{
         label.shadowColor = .black
         label.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(label)
-        
+        status = true
         start()
     }
     
@@ -107,7 +131,7 @@ class chatVC: UIViewController{
         let ref = Database.database().reference().child("Queue").child(id)
         ref.setValue(["inChat":"false", "id": id, "chatRoom": "nil"])
         let theHeight = self.view.bounds.width - 40
-        koiImage.frame = CGRect(x: 20, y: self.chatButton.frame.maxY + 50, width: self.view.bounds.width - 40, height: theHeight)
+        koiImage.frame = CGRect(x: 20, y: self.chatButton.frame.maxY, width: self.view.bounds.width - 40, height: theHeight)
         //let gifImage = UIImage.gifImageWithName("kscsscoi")
         //koiImage.image = UIImage.gifImageWithName("kscsscoi")
         koiImage.loadGif(name: "kscsscoi")
@@ -119,13 +143,27 @@ class chatVC: UIViewController{
     func scheduledTimerWithTimeInterval(){
         // Should stop at certain interval
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: {_ in
-        if(!self.checkIfInChat())
+        self.timeRunning += 2
+        if(self.timeRunning <= 10)
         {
-            self.searchForUser()
-        }
+            if(!self.checkIfInChat())
+            {
+                self.searchForUser()
+            }
+        }else{
+            self.resetView()
+            }
         })
-        
-        
+    }
+    func resetView()
+    {
+        koiImage.removeFromSuperview()
+        label.removeFromSuperview()
+        timeRunning = 0
+        exitQueue()
+        descLabel.text = "No user's found.\nPress start to search again"
+        self.view.addSubview(descLabel)
+        self.view.addSubview(chatButton)
     }
     func checkIfInChat()->Bool
     {
@@ -153,6 +191,7 @@ class chatVC: UIViewController{
     {
         print("Searching for user!")
         let ref = Database.database().reference().child("Queue")
+        DispatchQueue.main.async {
         ref.observeSingleEvent(of: .value, with: { snapshot in
             
             if !snapshot.exists() {
@@ -177,7 +216,7 @@ class chatVC: UIViewController{
                 }
             }
         })
-        
+        }
     }
     func goToChat()
     {

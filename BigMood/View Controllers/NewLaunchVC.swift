@@ -66,7 +66,7 @@ class NewLaunchVC: UIViewController{
         slider = CustomSlider(frame:CGRect(x: 20, y: 40, width: self.view.bounds.width - 40, height: 50))
         slider.trackWidth = 10
         slider.minimumValue = 0
-        slider.maximumValue = 6
+        slider.maximumValue = 9
         slider.isContinuous = true
         slider.tintColor = UIColor.white
         slider.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -148,12 +148,27 @@ class NewLaunchVC: UIViewController{
             slider.setThumbImage(#imageLiteral(resourceName: "Disappointed_but_Relieved_Emoji_Icon_1e554748-dab1-472b-937e-54ecd95ee75c_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
             feelingLabel.text = "I feel lonely."
             currentMood = "Lonely"
+        }else if(theValue < 6)
+        {
+            slider.setThumbImage(#imageLiteral(resourceName: "stressed").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            feelingLabel.text = "I feel stressed."
+            currentMood = "Stressed"
+        }else if(theValue < 7)
+        {
+            slider.setThumbImage(#imageLiteral(resourceName: "anxious").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            feelingLabel.text = "I feel anxious."
+            currentMood = "Anxious"
+        }else if(theValue < 8)
+        {
+            slider.setThumbImage(#imageLiteral(resourceName: "deprressedorsad").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
+            feelingLabel.text = "I feel sad."
+            currentMood = "Sad"
         }
         else
         {
             slider.setThumbImage(#imageLiteral(resourceName: "Crying_Emoji_Icon_2_70x70").resizeImage(targetSize: CGSize(width: 50, height: 50)), for: .normal)
-            feelingLabel.text = "I feel Sad..."
-            currentMood = "Sad"
+            feelingLabel.text = "I feel depressed..."
+            currentMood = "Depressed"
         }
         
     }
@@ -239,13 +254,30 @@ class NewLaunchVC: UIViewController{
     }
     @objc func chatButtonPressed()
     {
-        let vc = chatVC()
-        let animation = CATransition()
-        animation.type = .push
-        animation.subtype = .fromBottom
-        animation.duration = 0.6
-        self.view.window!.layer.add(animation, forKey: nil)
-        self.present(vc, animated: false, completion: nil)
+        let vc = messagesVC()
+        let userDefaults = Foundation.UserDefaults.standard
+        let theid = (userDefaults.string(forKey: "myID") ?? String())
+        let chatroom = (userDefaults.string(forKey: "chatRoom") ?? String())
+        if(chatroom.isEmpty || theid.isEmpty)
+        {
+            let vc2 = chatVC()
+            let animation = CATransition()
+            animation.type = .push
+            animation.subtype = .fromBottom
+            animation.duration = 0.6
+            self.view.window!.layer.add(animation, forKey: nil)
+            self.present(vc2, animated: false, completion: nil)
+
+        }else{
+            vc.chatID = chatroom
+            vc.id = theid
+            let animation = CATransition()
+            animation.type = .push
+            animation.subtype = .fromBottom
+            animation.duration = 0.6
+            self.view.window!.layer.add(animation, forKey: nil)
+            self.present(vc, animated: false, completion: nil)
+        }
     }
     @objc func journalPressed()
     {
@@ -330,7 +362,7 @@ class NewLaunchVC: UIViewController{
     }
     @objc func moodPressed(_ sender: UIButton)
     {
-        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
         let userDefaults = Foundation.UserDefaults.standard
         var ctr = 0
         while(ctr < moodStrings.count)
@@ -372,8 +404,8 @@ class NewLaunchVC: UIViewController{
     //i = theMood to look for
     func getColorSet(i: String) -> UIColor
     {
-        //["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
-        let colors = [#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1),#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1),#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)]
+        //["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
+        let colors = [#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1),#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1),#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)]
             if(i == "Happy")
             {
                 return colors[0]
@@ -413,7 +445,7 @@ class NewLaunchVC: UIViewController{
     }
     func uplaodTemp()
     {
-    let moodString = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let moodString = ["Depressed","Anxious","Stressed"]
     
     for i in moodString{
         let ref = Database.database().reference().child("Moods").child(i)

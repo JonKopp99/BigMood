@@ -59,16 +59,10 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         moodTB.backgroundColor = .clear
         
         getSavedResources()
+        noResourcesFooterView()
         self.view.addSubview(moodTB)
-        
+    
         NotificationCenter.default.addObserver(self, selector: #selector(fullScreenPressed), name: NSNotification.Name(rawValue: "fullScreen"), object: nil)
-        setUpFooterView()
-    }
-    func setUpFooterView()
-    {
-        let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
-        theView.backgroundColor = .clear
-        self.moodTB.tableFooterView = theView
     }
     func setScrollIndicatorColor() {
         for view in self.moodTB.subviews {
@@ -82,6 +76,26 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         
         self.moodTB.flashScrollIndicators()
+    }
+    func noResourcesFooterView()
+    {
+        if(articles.isEmpty && videos.isEmpty)
+        {
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
+            let label = UILabel()
+            label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
+            label.textAlignment = .center
+            label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+            //label.adjustsFontSizeToFitWidth = true
+            label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            label.text = "No saved resources to load..."
+            //label.shadowColor = .black
+            //label.shadowOffset = CGSize(width: -2, height: 2)
+            footerView.addSubview(label)
+            moodTB.tableFooterView = footerView
+        }else{
+            moodTB.tableFooterView?.isHidden = true
+        }
     }
     @objc func backButtonPressed()
     {

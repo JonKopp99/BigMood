@@ -1,17 +1,19 @@
 //
-//  aboutVC.swift
+//  OrganizationDescription.swift
 //  BigMood
 //
-//  Created by Jonathan Kopp on 3/3/19.
+//  Created by Jonathan Kopp on 3/23/19.
 //  Copyright © 2019 Jonathan Kopp. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class aboutVC: UIViewController, UITextViewDelegate{
+class OrganizationDescription: UIViewController, UITextViewDelegate{
     var backgroundImage = UIImageView()
     var greetingLabel = UILabel()
+    var orgName = String()
+    var theDesc = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
@@ -28,9 +30,9 @@ class aboutVC: UIViewController, UITextViewDelegate{
         let desctextView = UITextView()
         desctextView.frame = CGRect(x: 10, y: 100, width: self.view.bounds.width - 20, height: 180)
         desctextView.delegate = self
-        desctextView.textAlignment = .natural
+        desctextView.textAlignment = .justified
         desctextView.textColor = .white
-        desctextView.text = "Big Mood was created to help it's users deal with mental illness"
+        desctextView.text = theDesc
         desctextView.font = UIFont(name: "Avenir-Book", size: 20)
         desctextView.isSelectable = true
         desctextView.layer.cornerRadius = 10
@@ -48,7 +50,7 @@ class aboutVC: UIViewController, UITextViewDelegate{
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 35)
         greetingLabel.adjustsFontSizeToFitWidth = true
         greetingLabel.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        greetingLabel.text = "About"
+        greetingLabel.text = orgName
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(greetingLabel)

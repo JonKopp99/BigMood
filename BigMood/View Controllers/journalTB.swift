@@ -66,6 +66,7 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         //clearDefaults()
         getTheDates()
         //insertDummyData()
+        noPagesFooterView()
         moodTB.reloadData()
         if(!pages.isEmpty){
         if(!(stripDate(theDate: pages[0]) == stripDate(theDate: getCurrentDate())))
@@ -81,13 +82,36 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         let userDefaults = Foundation.UserDefaults.standard
         userDefaults.set([], forKey: "pages")
     }
+    
+    func noPagesFooterView()
+    {
+        if(pages.isEmpty)
+        {
+            let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
+            let label = UILabel()
+            label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
+            label.textAlignment = .center
+            label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+            //label.adjustsFontSizeToFitWidth = true
+            label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            label.text = "Press + to start your journal"
+            //label.shadowColor = .black
+            //label.shadowOffset = CGSize(width: -2, height: 2)
+            footerView.addSubview(label)
+            moodTB.tableFooterView = footerView
+        }else{
+            moodTB.tableFooterView?.isHidden = true
+        }
+    }
+    
     @objc func addButtonPressed()
     {
+        moodTB.tableFooterView?.isHidden = true
         addButton.removeFromSuperview()
         let stringDate = stripDate(theDate: getCurrentDate())
         let userDefaults = Foundation.UserDefaults.standard
         var theDates = (userDefaults.stringArray(forKey: "pages") ?? [String]())
-        theDates.append(stringDate)
+        theDates.insert(stringDate, at: 0)
         userDefaults.set(theDates, forKey: "pages")
         addNewPage(stringDate: stringDate)
     }
@@ -99,6 +123,23 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         moodTB.beginUpdates()
         moodTB.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
         moodTB.endUpdates()
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if(editingStyle == .delete)
+        {
+            let userDefaults = Foundation.UserDefaults.standard
+            pages.remove(at: indexPath.row)
+            var theDates = (userDefaults.stringArray(forKey: "pages") ?? [String]())
+            theDates.remove(at: indexPath.row)
+            userDefaults.set(theDates, forKey: "pages")
+            moodTB.deleteRows(at: [indexPath], with: .fade)
+        }
+        
     }
     @objc func backButtonPressed()
     {

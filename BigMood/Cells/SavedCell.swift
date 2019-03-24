@@ -12,6 +12,8 @@ class SavedCell: UITableViewCell{
     var index = Int()
     var deleteButton = UIButton()
     var fullscreenButton = UIButton()
+    var cellAlreadyLoaded = Bool()
+
     override var frame: CGRect {
         get {
             return super.frame
@@ -25,7 +27,10 @@ class SavedCell: UITableViewCell{
             super.frame = frame
         }
     }
+    
     override func layoutSubviews() {
+        if(!cellAlreadyLoaded)
+        {
         videoView.frame = CGRect(x: 0, y: 35, width: frame.width, height: frame.height - 35)
         videoView.backgroundColor = .clear
         articleView.backgroundColor = #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
@@ -39,6 +44,7 @@ class SavedCell: UITableViewCell{
         deleteButton.contentMode = .scaleAspectFit
         deleteButton.addTarget(self, action: #selector(deletePressed), for: .touchUpInside)
         //self.addSubview(deleteButton)
+        
         if(video)
         {
             addSubview(videoView)
@@ -57,6 +63,8 @@ class SavedCell: UITableViewCell{
             fullscreenButton.contentMode = .scaleAspectFit
             fullscreenButton.addTarget(self, action: #selector(fullScreenPressed), for: .touchUpInside)
             contentView.addSubview(fullscreenButton)
+        }
+            cellAlreadyLoaded = true
         }
         
     }
