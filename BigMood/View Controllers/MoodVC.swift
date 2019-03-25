@@ -27,6 +27,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
+        //print("CURRENT MOOD", mood)
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
@@ -59,9 +60,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height - greetinglabelView.frame.maxY - 5)
         moodTB.separatorStyle = .none
         moodTB.backgroundColor = .clear
+        DispatchQueue.main.async {
+            self.getVideos()
+            self.getArticles()
+        }
         
-        getVideos()
-        getArticles()
         
         
         setUpFooterView()
@@ -119,19 +122,19 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         theView.addSubview(b2)
         self.moodTB.tableFooterView = theView
         
-        if(mood == "Sad")
+        if(mood == "Sad" || mood == "Depressed")
         {
             theView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
             let b3 = UIButton()
             b3.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 50, width: 200, height: 40.0)
-            b3.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+            b3.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
             b3.setTitle("Immediate Help", for: .normal)
-            b3.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+            b3.setTitleColor(#colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 1), for: .normal)
             b3.titleLabel?.adjustsFontSizeToFitWidth = true
-            b3.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
-            b3.layer.cornerRadius = 20
-            b3.layer.borderWidth = 2
-            b3.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+            //b3.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+            //b3.layer.cornerRadius = 20
+            //b3.layer.borderWidth = 2
+            //b3.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             b3.addTarget(self, action:#selector(self.immediateHelpPressed), for: .touchUpInside)
             theView.addSubview(b3)
         }
@@ -148,7 +151,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc func addButtonPressed()
     {
-        print("Add Button Pressed")
+        //print("Add Button Pressed")
         let vc = userSubmit()
         vc.mood = mood
         let animation = CATransition()
@@ -161,7 +164,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     @objc func loadMorePressed()
     {
-        print("Pressed")
+       // print("Pressed")
         let cell1 = tableView(moodTB, cellForRowAt: IndexPath(row: 0, section: 0)) as! moodCell
         let cell2 = tableView(moodTB, cellForRowAt: IndexPath(row: 1, section: 0)) as! moodCell
         videoID = videos[Int(arc4random_uniform(UInt32(videos.count)))]
@@ -294,6 +297,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             {
                 self.videos.append(value)
             }
+            self.videoID = self.videos[Int(arc4random_uniform(UInt32(self.videos.count)))]
         })
         }
     }
@@ -316,7 +320,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.view.addSubview(self.moodTB)
             self.setScrollIndicatorColor(color: self.color)
             self.articleLink = self.articles[Int(arc4random_uniform(UInt32(self.articles.count)))]
-            self.videoID = self.videos[Int(arc4random_uniform(UInt32(self.videos.count)))]
+            //print(self.videos.count)
+            
         })
             
         }

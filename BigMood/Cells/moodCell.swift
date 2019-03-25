@@ -116,11 +116,11 @@ class moodCell: UITableViewCell{
         {
             theVideos.append(videoLink)
             userDefaults.set(theVideos, forKey: "SavedVideos")
-            print("Save as video")
+            //print("Save as video")
         }else{
             theArticles.append(articleLink)
             userDefaults.set(theArticles, forKey: "SavedArticles")
-            print("Save as article")
+            //print("Save as article")
         }
         
     }

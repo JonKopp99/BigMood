@@ -16,8 +16,10 @@ class pageView: UIViewController, UITextViewDelegate{
     var dateAsString = String()
     var textView = UITextView()
     var doneButton = UIButton()
+    var previewText = String()
     override func viewDidLoad() {
         super.viewDidLoad()
+        previewText = "This is your very own journal page! Write about anything you wish."
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
@@ -74,6 +76,7 @@ class pageView: UIViewController, UITextViewDelegate{
         swipeDown.direction = UISwipeGestureRecognizer.Direction.down
         self.view.addGestureRecognizer(swipeDown)
         textView.addGestureRecognizer(swipeDown)
+        
     }
     
     @objc func donePressed()
@@ -115,13 +118,13 @@ class pageView: UIViewController, UITextViewDelegate{
         let theDates = (userDefaults.string(forKey: dateAsString) ?? String())
         if(theDates.isEmpty)
         {
-            return "Preview Text..."
+            return previewText
         }
         return theDates
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.view.addSubview(doneButton)
-        if(textView.text == "Preview Text...")
+        if(textView.text == previewText)
         {
             textView.text = ""
         }
@@ -130,7 +133,7 @@ class pageView: UIViewController, UITextViewDelegate{
         doneButton.removeFromSuperview()
         if(textView.text == "")
         {
-            textView.text = "Preview Text..."
+            textView.text = previewText
         }
     }
     func saveText()

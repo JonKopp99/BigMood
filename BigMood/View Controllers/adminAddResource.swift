@@ -160,8 +160,8 @@ class adminAddResource: UIViewController, UIPickerViewDelegate, UIPickerViewData
     {
         let resource = inputText.text!
         let mood = moodTextField.text!
-        print(mood)
-        print(resource)
+        //print(mood)
+        //print(resource)
         var type = "videos"
         if(video == false)
         {

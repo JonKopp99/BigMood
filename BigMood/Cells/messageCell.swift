@@ -19,12 +19,12 @@ class messageCell: UITableViewCell{
         msg.text = theMsg
         if(sender)
         {
-            print("Width before:", msg.frame.width)
+            //print("Width before:", msg.frame.width)
             msg.frame = CGRect(x: frame.width * 0.4, y: 0, width: frame.width - frame.width * 0.4 - 10, height: frame.height)
             msg.sizeToFit()
             msg.textAlignment = .left
             msg.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-            print("Width after:", msg.frame.width)
+            //print("Width after:", msg.frame.width)
             let newWidth = msg.frame.width
              msg.frame = CGRect(x: frame.width - newWidth - 10, y: 0, width: newWidth, height: frame.height)
         }else{

@@ -139,7 +139,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         //let cell = tableView.dequeueReusableCell(withIdentifier: "savedCell") as! SavedCell
         let cell = SavedCell()
         var resourceMode = true //true if video false if article
-        print("Index Row",indexPath.row)
+        //print("Index Row",indexPath.row)
         if(indexPath.row > videos.count - 1)
         {
             resourceMode = false
@@ -225,9 +225,6 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         return true
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
-    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             if(indexPath.row < videos.count)
             {
@@ -250,8 +247,8 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         {
             articles.append(article(link: a))
         }
-        print(articles.count)
-        print(videos.count)
+        //print(articles.count)
+        //print(videos.count)
         self.moodTB.reloadData()
         setScrollIndicatorColor()
     }

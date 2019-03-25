@@ -111,6 +111,7 @@ class userSubmit: UIViewController, UIPickerViewDelegate, UITextFieldDelegate{
         inputText.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0).withAlphaComponent(0.4)
         inputText.placeholder = "Enter video link"
         inputText.returnKeyType = UIReturnKeyType.done
+        inputText.delegate = self
         self.view.addSubview(inputText)
         
         b3.removeFromSuperview()
@@ -158,8 +159,8 @@ class userSubmit: UIViewController, UIPickerViewDelegate, UITextFieldDelegate{
     @objc func donePressed()
     {
         let resource = inputText.text!
-        print(mood)
-        print(resource)
+        //print(mood)
+        //print(resource)
         var type = "videos"
         if(video == false)
         {
@@ -168,9 +169,24 @@ class userSubmit: UIViewController, UIPickerViewDelegate, UITextFieldDelegate{
         let ref = Database.database().reference().child("Submitted").child(mood).child(type)
         ref.childByAutoId().setValue(resource)
         //ref.setValue(resource)
+        let animation = CATransition()
+        animation.type = .fade
+        animation.duration = 0.4
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
+        
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        let animation = CATransition()
+        animation.type = .fade
+        animation.duration = 0.4
+        animation.subtype = .fromLeft
+        self.view.window!.layer.add(animation, forKey: nil)
+        
+        self.dismiss(animated: false, completion: nil)
         return true
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

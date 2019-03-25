@@ -88,13 +88,15 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
         if(pages.isEmpty)
         {
             let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
-            let label = UILabel()
+            let label = UIButton()
             label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
-            label.textAlignment = .center
-            label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+            label.titleLabel?.textAlignment = .center
+            label.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
             //label.adjustsFontSizeToFitWidth = true
-            label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-            label.text = "Press + to start your journal"
+            label.backgroundColor = .clear
+            label.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+            label.setTitle("Press + to start your journal", for: .normal)
+            label.addTarget(self, action: #selector(addButtonPressed), for: .touchUpInside)
             //label.shadowColor = .black
             //label.shadowOffset = CGSize(width: -2, height: 2)
             footerView.addSubview(label)
@@ -226,7 +228,7 @@ class journalTB: UIViewController, UITableViewDelegate, UITableViewDataSource{
             {
                 let values = i.components(separatedBy: "-")
                 let newDate = customDate(day: values[1], month: values[0], year: values[2])
-                print(newDate)
+                //print(newDate)
                 pages.append(newDate)
             }
         }

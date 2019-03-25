@@ -49,15 +49,15 @@ class settingsVC: UIViewController{
         aboutButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         aboutButton.addTarget(self, action:#selector(self.aboutPressed), for: .touchUpInside)
         
-        resetTrakerButton.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: self.view.bounds.height / 2, width: 200, height: 40.0)
-        resetTrakerButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
-        resetTrakerButton.setTitle("How to use", for: .normal)
-        resetTrakerButton.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
-        resetTrakerButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        resetTrakerButton.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
-        resetTrakerButton.layer.cornerRadius = 20
-        resetTrakerButton.layer.borderWidth = 2
-        resetTrakerButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+//        resetTrakerButton.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: self.view.bounds.height / 2, width: 200, height: 40.0)
+//        resetTrakerButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
+//        resetTrakerButton.setTitle("How to use", for: .normal)
+//        resetTrakerButton.setTitleColor(#colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0), for: .normal)
+//        resetTrakerButton.titleLabel?.adjustsFontSizeToFitWidth = true
+//        resetTrakerButton.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
+//        resetTrakerButton.layer.cornerRadius = 20
+//        resetTrakerButton.layer.borderWidth = 2
+//        resetTrakerButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         //resetTrakerButton.addTarget(self, action:#selector(self.resetPressed), for: .touchUpInside)
         
         self.view.addSubview(aboutButton)
@@ -95,7 +95,7 @@ class settingsVC: UIViewController{
     }
     @objc func contactPressed()
     {
-        print("Contact Pressed")
+        //print("Contact Pressed")
         let vc = contactVC()
         let animation = CATransition()
         animation.type = .push
@@ -107,7 +107,7 @@ class settingsVC: UIViewController{
     
     @objc func aboutPressed()
     {
-        print("About Pressed")
+        //print("About Pressed")
         let vc = aboutVC()
         let animation = CATransition()
         animation.type = .push

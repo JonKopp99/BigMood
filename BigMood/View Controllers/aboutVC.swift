@@ -30,7 +30,7 @@ class aboutVC: UIViewController, UITextViewDelegate{
         desctextView.delegate = self
         desctextView.textAlignment = .natural
         desctextView.textColor = .white
-        desctextView.text = "Big Mood was created to help it's users deal with mental illness"
+        desctextView.text = "Big Mood's mission is to help bring balance to every user's life and we want this app to be special for every user. Currently in the world around 450 million people suffer from mental illness's. With Big Mood we hope that we can help this by providing users with content that helps."
         desctextView.font = UIFont(name: "Avenir-Book", size: 20)
         desctextView.isSelectable = true
         desctextView.layer.cornerRadius = 10

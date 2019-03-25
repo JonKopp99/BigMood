@@ -88,7 +88,7 @@ class chatVC: UIViewController{
         let chatroom = (userDefaults.string(forKey: "chatRoom") ?? String())
         if(chatroom.isEmpty || theid.isEmpty)
         {
-            print("Not in chat")
+            //print("Not in chat")
             return
         }else{
             self.dismiss(animated: false, completion: nil)
@@ -106,7 +106,7 @@ class chatVC: UIViewController{
     }
     @objc func chatPressed()
     {
-        print("Pressed")
+       // print("Pressed")
         
         label = UILabel()
         label.frame = CGRect(x: 45, y: self.greetingLabel.frame.maxY + 20, width: self.view.bounds.width - 90, height: 50)
@@ -167,7 +167,7 @@ class chatVC: UIViewController{
     }
     func checkIfInChat()->Bool
     {
-        print("Checking if in chat!")
+        //print("Checking if in chat!")
         let found = false
         let ref = Database.database().reference().child("Queue").child(id)
         DispatchQueue.main.async {
@@ -189,7 +189,7 @@ class chatVC: UIViewController{
     }
     func searchForUser()
     {
-        print("Searching for user!")
+        //print("Searching for user!")
         let ref = Database.database().reference().child("Queue")
         DispatchQueue.main.async {
         ref.observeSingleEvent(of: .value, with: { snapshot in
@@ -197,14 +197,14 @@ class chatVC: UIViewController{
             if !snapshot.exists() {
                 return }
             let value = snapshot.value as! [String : AnyObject]
-            print("Count of QUEUES: ", value.count)
+            //print("Count of QUEUES: ", value.count)
             for(_, newvalue) in value
             {
                 let theValue = newvalue as! [String : String]
                 let theID = theValue["id"]!
                 if(theID != self.id)
                 {
-                    print("Found new user with ID: ", theID)
+                    //print("Found new user with ID: ", theID)
                     var chatRoomID = Int(self.id)!
                     chatRoomID += Int(theID)!
                     let newRef = Database.database().reference().child("Queue").child(theID)
@@ -234,7 +234,7 @@ class chatVC: UIViewController{
             if(chatID != "nil")
             {
                 ref.setValue([])
-                print("Going to chat with id: ", chatID)
+                //print("Going to chat with id: ", chatID)
                 let vc = messagesVC()
                 vc.chatID = chatID
                 vc.id = self.id

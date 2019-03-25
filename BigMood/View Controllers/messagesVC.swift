@@ -187,7 +187,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             //msg.sizeToFit()
             height = msg.sizeThatFits(CGSize(width: msg.frame.width, height: CGFloat.greatestFiniteMagnitude)).height + 10
         }
-        print(height)
+        //print(height)
         return height
     }
     
@@ -227,7 +227,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         //msg.sizeToFit()
         
         var height = msg.sizeThatFits(CGSize(width: msg.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
-        print(height)
+        //print(height)
         if(height >= 250)
         {
             height = 250
@@ -277,7 +277,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     func scheduledTimerWithTimeInterval(){
         // Should stop at certain interval
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: {_ in
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true, block: {_ in
         self.getNewMessages()
             self.noMessagesFooterView()
         })
@@ -285,7 +285,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     func leftTheChat()
     {
-        print("Left the chat")
+        //print("Left the chat")
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100))
         let label = UILabel()
         label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
@@ -317,7 +317,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     
     func getNewMessages()
     {
-        print("Checking for new messages!")
+        //print("Checking for new messages!")
         
         let ref = Database.database().reference().child("Chats").child(chatID)
         
@@ -326,7 +326,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             if !snapshot.exists() {
                 return }
             let value = snapshot.value as! [String : AnyObject]
-            print("amount of chaters: ", value.count)
+           // print("amount of chaters: ", value.count)
             if(value.count <= 1)
             {
                 self.timer.invalidate()

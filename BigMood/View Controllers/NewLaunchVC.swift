@@ -64,6 +64,10 @@ class NewLaunchVC: UIViewController{
         feelingLabel.adjustsFontSizeToFitWidth = true
         feelingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         slider = CustomSlider(frame:CGRect(x: 20, y: 40, width: self.view.bounds.width - 40, height: 50))
+        if(slider.frame.width >= 700)
+        {
+            slider.frame = CGRect(x: 100, y: 40, width: self.view.bounds.width - 200, height: 50)
+        }
         slider.trackWidth = 10
         slider.minimumValue = 0
         slider.maximumValue = 9
@@ -312,7 +316,7 @@ class NewLaunchVC: UIViewController{
     
     @objc func savedResourcesPressed()
     {
-        print("Saved Resources Pressed")
+        //print("Saved Resources Pressed")
         let vc = SavedResources()
         let animation = CATransition()
         animation.type = .push
@@ -369,7 +373,7 @@ class NewLaunchVC: UIViewController{
         {
         if(currentMood == moodStrings[ctr])
         {
-            print(moodStrings[ctr])
+            //print(moodStrings[ctr])
             let moodDict = (userDefaults.dictionary(forKey: moodStrings[ctr]) ?? [String : Int]())
             if(moodDict.isEmpty)
             {
@@ -378,7 +382,7 @@ class NewLaunchVC: UIViewController{
             }else{
             for (_,value) in moodDict
             {
-                print(value)
+                //print(value)
                 let newValue = value as? Int
                 let newDict = [moodStrings[ctr] : newValue! + 1] as [String : Any]
                 userDefaults.set(newDict, forKey: moodStrings[ctr])
@@ -421,9 +425,18 @@ class NewLaunchVC: UIViewController{
             }else if(i == "Lonely")
             {
                 return colors[4]
-            }else if(i == "Sad")
+            }else if(i == "Stressed")
             {
                 return colors[5]
+            }else if(i == "Anxious")
+            {
+                return colors[6]
+            }else if(i == "Sad")
+            {
+                return colors[7]
+            }else if(i == "Depressed")
+            {
+                return colors[8]
             }
         return colors[0]
     }

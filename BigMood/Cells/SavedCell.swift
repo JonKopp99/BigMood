@@ -39,11 +39,6 @@ class SavedCell: UITableViewCell{
         videoView.layer.masksToBounds = true
         articleView.layer.cornerRadius = 10
         articleView.layer.masksToBounds = true
-        deleteButton.frame = CGRect(x: frame.width - 35, y: 0, width: 35, height: 35)
-        deleteButton.setImage(#imageLiteral(resourceName: "icons8-cancel-50 (2)"), for: .normal)
-        deleteButton.contentMode = .scaleAspectFit
-        deleteButton.addTarget(self, action: #selector(deletePressed), for: .touchUpInside)
-        //self.addSubview(deleteButton)
         
         if(video)
         {
@@ -80,25 +75,8 @@ class SavedCell: UITableViewCell{
     
     @objc func fullScreenPressed()
     {
-        print("Pressed")
+        //print("Pressed")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "fullScreen"), object: nil, userInfo: ["url" : articleLink])
-    }
-    @objc func deletePressed()
-    {
-        let userDefaults = Foundation.UserDefaults.standard
-        var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
-        var theArticles = (userDefaults.stringArray(forKey: "SavedArticles") ?? [String]())
-        if(video)
-        {
-            theVideos.remove(at: index)
-            userDefaults.set(theVideos, forKey: "SavedVideos")
-            print("Save as video")
-        }else{
-            theArticles.remove(at: index)
-            userDefaults.set(theArticles, forKey: "SavedArticles")
-            print("Save as article")
-        }
-        
     }
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

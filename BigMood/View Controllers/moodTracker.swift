@@ -116,7 +116,7 @@ class moodTracker: UIViewController{
             self.resetTrakerButton.alpha = 0.0
             self.resetView.alpha = 1.0
             })
-        print("Reset Pressed")
+        //print("Reset Pressed")
         
         
     }
@@ -126,7 +126,7 @@ class moodTracker: UIViewController{
         
         resetView.removeFromSuperview()
         resetView = UIView()
-        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
         let userDefaults = Foundation.UserDefaults.standard
         var ctr = 0
         
@@ -186,7 +186,7 @@ class moodTracker: UIViewController{
         {
             let data = PieChartDataEntry(value: Double(moodValues[ctr]), label: theMoods[ctr])
             datasets.append(data)
-            colors[ctr] = colors[ctr].withAlphaComponent(0.5)
+            colors[ctr] = colors[ctr].withAlphaComponent(0.8)
             ctr += 1
         }
         let dataSet = PieChartDataSet(values: datasets, label: "")
@@ -214,6 +214,7 @@ class moodTracker: UIViewController{
         l.yEntrySpace = 0
         l.yOffset = 0
         
+        
         pieChart.notifyDataSetChanged()
         self.view.addSubview(pieChart)
         }else{
@@ -235,8 +236,9 @@ class moodTracker: UIViewController{
     }
     func getColorSet() -> [UIColor]
     {
-        //["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
-        let colors = [#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1),#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1),#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)]
+        //["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
+        //let colors = [#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1),#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1),#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)]
+        let colors = [#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1),#colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1),#colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1),#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1),#colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1),#colorLiteral(red: 0.4513868093, green: 0.9930960536, blue: 1, alpha: 1),#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1),#colorLiteral(red: 0, green: 0.3285208941, blue: 0.5748849511, alpha: 1),#colorLiteral(red: 0.004859850742, green: 0.09608627111, blue: 0.5749928951, alpha: 1)]
         var theColors = [UIColor]()
         for i in theMoods
         {
@@ -255,9 +257,18 @@ class moodTracker: UIViewController{
             }else if(i == "Lonely")
             {
                 theColors.append(colors[4])
-            }else if(i == "Sad")
+            }else if(i == "Stressed")
             {
                 theColors.append(colors[5])
+            }else if(i == "Anxious")
+            {
+                theColors.append(colors[6])
+            }else if(i == "Sad")
+            {
+                theColors.append(colors[7])
+            }else if(i == "Depressed")
+            {
+                theColors.append(colors[8])
             }
         }
         return theColors
@@ -265,7 +276,7 @@ class moodTracker: UIViewController{
     
     func getTheMoodValues()
     {
-        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Sad"]
+        let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
         let userDefaults = Foundation.UserDefaults.standard
         var ctr = 0
         
@@ -276,7 +287,7 @@ class moodTracker: UIViewController{
             {
                 for (key,value) in moodDict
                 {
-                    print(value)
+                    //print(value)
                     let theValue = value as? Int
                     self.moodValues.append(theValue!)
                     self.theMoods.append(key)
