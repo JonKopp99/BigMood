@@ -1,6 +1,6 @@
 ## Big Mood
 
-Recommendation service that suggests activities and different forms of media consumption depending on the user's mood. Also allows users to track their moods, and save content to a list.
+Big mood generates content for every mood. Track your moods with a visual graph, chat with anonymous users, and create your very own journal. App Store link: https://itunes.apple.com/us/app/big-mood/id1455064691
 
 ## Technologies Used
 
