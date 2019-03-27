@@ -112,7 +112,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             moodTB.tableFooterView?.isHidden = true
         }
     }
-    
+
     func getSavedMessages()
     {
         let userDefaults = Foundation.UserDefaults.standard
@@ -277,7 +277,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     func scheduledTimerWithTimeInterval(){
         // Should stop at certain interval
-        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true, block: {_ in
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: {_ in
         self.getNewMessages()
             self.noMessagesFooterView()
         })
