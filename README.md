@@ -10,6 +10,10 @@ Big mood generates content for every mood. Track your moods with a visual graph,
 
 ▶ Core Data
 
+▶ WebKit
+
+▶ UIKit
+
 ## Pods
 
 ▶ Firebase Core
