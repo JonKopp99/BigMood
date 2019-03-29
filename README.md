@@ -4,15 +4,7 @@ Big mood generates content for every mood. Track your moods with a visual graph,
 
 ## Technologies Used
 
-▶ Swift 4
-
-▶ CocoaPods
-
-▶ Core Data
-
-▶ WebKit
-
-▶ UIKit
+Swift 4, CocoaPods, Core Data, WebKit, UIKit
 
 ## Pods
 
