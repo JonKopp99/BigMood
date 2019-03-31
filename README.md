@@ -30,7 +30,3 @@ Swift 4, CocoaPods, Core Data, WebKit, UIKit
 **Mood Tracker**
 
 ![](https://lh3.googleusercontent.com/9JToWzXGWnSUsRg72ammmQYkRrv7JTWNsZblqu1LPJLYpxvurq494zzhiuvkKCXiruzowNcXqHZ1)
-
-**Saved Resources**
-
-![](https://lh3.googleusercontent.com/Y3ua7zcXdVmxt0cQfVJxnGB4hGkWuQfwAF3IL50MIcW-f7U2UmJaywQzoQTAnD6WboJPhWImkX1F)
