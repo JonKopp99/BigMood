@@ -314,7 +314,27 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         moodTB.tableFooterView = footerView
         self.scrollToBottom()
     }
+   
+    /**
     
+    =================================================================================================
+    Get new messages inside the chat database, check if there are two users inside the database, and update the tableview accordingly.
+    =================================================================================================
+     
+     Create a refrence to the database's chat that we are searching inside.
+    
+     Observe all the values inside the database's refrence, if there are more then two values that means there are two users still in the chat room.
+     
+        If they're less than two values in the chat exit the chat room.
+     
+     Find the database refrence for the other user in the chat and check if there is a new message.
+     
+        Use the global counter thereMSGCount to check if there is a new value at that location inside the database.
+     
+                Add the new Message to the tableView and then update the messages inside of it.
+     
+    */
+   
     func getNewMessages()
     {
         //print("Checking for new messages!")
