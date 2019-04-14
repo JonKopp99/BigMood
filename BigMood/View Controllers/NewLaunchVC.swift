@@ -26,17 +26,18 @@ class NewLaunchVC: UIViewController{
     var upDownAlpha = Bool()
     var slider = CustomSlider()
     var currentMood = String()
-    var b = UIButton()
+    var b = UIButton()//Ready button!
     var backgroundImage = UIImageView()
     var admin = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
         backgroundImage.image = #imageLiteral(resourceName: "pexels-photo-392586")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
+        
         greetinglabelView.backgroundColor = .clear
         greetinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height + 60, width: self.view.bounds.width, height: 60)
         greetingLabel.frame = CGRect(x: 10, y: 0, width: self.greetinglabelView.bounds.width - 20, height: 50)
@@ -63,6 +64,7 @@ class NewLaunchVC: UIViewController{
         feelingLabel.font = UIFont(name: "Arial-BoldMT", size: 30)
         feelingLabel.adjustsFontSizeToFitWidth = true
         feelingLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
         slider = CustomSlider(frame:CGRect(x: 20, y: 40, width: self.view.bounds.width - 40, height: 50))
         if(slider.frame.width >= 700)
         {
@@ -176,6 +178,7 @@ class NewLaunchVC: UIViewController{
         }
         
     }
+    
     func moveLabels()
     {
         UIView.animate(withDuration: 1.0, animations: {
@@ -187,10 +190,11 @@ class NewLaunchVC: UIViewController{
                 self.feelinglabelView.frame = CGRect(x: 0, y: self.view.bounds.height / 4 + 60, width: self.view.bounds.width, height: 200)
                 
             }, completion: { (finished: Bool) in
-                self.setUpButtons()
+                //Do Nothing
             })
         })
     }
+    
     func setUpMenu()
     {
         let startX = self.menuView.bounds.width / 2 - 25
@@ -238,14 +242,8 @@ class NewLaunchVC: UIViewController{
             menuView.addSubview(admin)
         }
         
-        
-//
-//        swipeButton.frame = CGRect(x: self.view.bounds.width / 2 - 25, y: self.view.bounds.height - 65, width: 50, height: 50)
-//        swipeButton.setImage(#imageLiteral(resourceName: "icons8-chevron-up-50"), for: .normal)
-//        swipeButton.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-//        swipeButton.layer.shadowOffset = CGSize(width: -2, height: 2)
-//        self.view.addSubview(swipeButton)
     }
+    
     @objc func settingsButtonPressed()
     {
         let vc = settingsVC()
@@ -256,6 +254,7 @@ class NewLaunchVC: UIViewController{
         self.view.window!.layer.add(animation, forKey: nil)
         self.present(vc, animated: false, completion: nil)
     }
+    
     @objc func chatButtonPressed()
     {
         let vc = messagesVC()
@@ -283,6 +282,7 @@ class NewLaunchVC: UIViewController{
             self.present(vc, animated: false, completion: nil)
         }
     }
+    
     @objc func journalPressed()
     {
         let vc = journalTB()
@@ -293,6 +293,7 @@ class NewLaunchVC: UIViewController{
         self.view.window!.layer.add(animation, forKey: nil)
         self.present(vc, animated: false, completion: nil)
     }
+    
     @objc func adminButtonPressed()
     {
         let vc = adminAddResource()
@@ -303,6 +304,7 @@ class NewLaunchVC: UIViewController{
         self.view.window!.layer.add(animation, forKey: nil)
         self.present(vc, animated: false, completion: nil)
     }
+    
     @objc func moodTrackerPressed()
     {
         let vc = moodTracker()
@@ -316,7 +318,6 @@ class NewLaunchVC: UIViewController{
     
     @objc func savedResourcesPressed()
     {
-        //print("Saved Resources Pressed")
         let vc = SavedResources()
         let animation = CATransition()
         animation.type = .push
@@ -325,12 +326,14 @@ class NewLaunchVC: UIViewController{
         self.view.window!.layer.add(animation, forKey: nil)
         self.present(vc, animated: false, completion: nil)
     }
+    
     func scheduledTimerWithTimeInterval(){
         if(menuStatus == false)
         {
             timer = Timer.scheduledTimer(withTimeInterval: 0.015, repeats: true, block: {_ in self.changeAlpha()})
         }
     }
+    
     func changeAlpha()
     {
         if(swipeAlpha >= 1.0)
@@ -354,16 +357,7 @@ class NewLaunchVC: UIViewController{
             swipeButton.alpha = 0.0
         }
     }
-    func setUpButtons()
-    {
-        
-        animateButtons(ctr: 0)
-        
-        
-    }
-    func animateButtons(ctr: Int)
-    {
-    }
+    
     @objc func moodPressed(_ sender: UIButton)
     {
         let moodStrings = ["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]

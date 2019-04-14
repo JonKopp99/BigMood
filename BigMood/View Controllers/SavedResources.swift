@@ -26,9 +26,11 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
+        
         moodTB.dataSource = self
         moodTB.delegate = self
         moodTB.register(SavedCell.self, forCellReuseIdentifier: "savedCell")
+        
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
         greetinglabelView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 90)
@@ -61,9 +63,12 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         getSavedResources()
         noResourcesFooterView()
         self.view.addSubview(moodTB)
-    
+        
+        //If fullscreen is pressed!!!
         NotificationCenter.default.addObserver(self, selector: #selector(fullScreenPressed), name: NSNotification.Name(rawValue: "fullScreen"), object: nil)
     }
+    
+    
     func setScrollIndicatorColor() {
         for view in self.moodTB.subviews {
             if view.isKind(of: UIImageView.self),
@@ -77,6 +82,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.moodTB.flashScrollIndicators()
     }
+    
     func noResourcesFooterView()
     {
         if(articles.isEmpty && videos.isEmpty)
@@ -86,17 +92,15 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
             label.textAlignment = .center
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-            //label.adjustsFontSizeToFitWidth = true
             label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             label.text = "No saved resources to load..."
-            //label.shadowColor = .black
-            //label.shadowOffset = CGSize(width: -2, height: 2)
             footerView.addSubview(label)
             moodTB.tableFooterView = footerView
         }else{
             moodTB.tableFooterView?.isHidden = true
         }
     }
+    
     @objc func backButtonPressed()
     {
         let animation = CATransition()
@@ -107,6 +111,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         self.dismiss(animated: false, completion: nil)
     }
+    
     func moveLabels()
     {
         UIView.animate(withDuration: 0.7, animations: {
@@ -118,9 +123,11 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             })
         })
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         moveLabels()
     }
+    
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
         animation.type = .fade
@@ -140,16 +147,16 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = SavedCell()
         var resourceMode = true //true if video false if article
         //print("Index Row",indexPath.row)
-        if(indexPath.row > videos.count - 1)
+        if(indexPath.row > videos.count - 1)//article if true
         {
             resourceMode = false
         }
-        if(resourceMode)
+        if(resourceMode)//video
         {
             cell.video = true
             cell.videoLink = videos[indexPath.row].link!
             cell.index = indexPath.row
-        }else{
+        }else{//article
             cell.video = false
             cell.articleLink = articles[indexPath.row - (videos.count)].link!
         }
@@ -189,6 +196,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.articleFullView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         })
     }
+    
     @objc func minimizeButtonPressed(_ sender : UIButton)
     {
         UIView.animate(withDuration: 1, animations: {
@@ -200,10 +208,10 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.articleFullView.removeFromSuperview()
             
         })
-        
-        
     }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        //Delete from tb and remove from defaults!
         if editingStyle == .delete{
             let userDefaults = Foundation.UserDefaults.standard
             var theVideos = (userDefaults.stringArray(forKey: "SavedVideos") ?? [String]())
@@ -221,6 +229,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             moodTB.deleteRows(at: [indexPath], with: .fade)
         }
     }
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -232,6 +241,7 @@ class SavedResources: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
         return self.view.bounds.height / 1.2
     }
+    
     func getSavedResources()
     {
         let userDefaults = Foundation.UserDefaults.standard

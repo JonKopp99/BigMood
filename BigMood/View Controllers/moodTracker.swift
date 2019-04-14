@@ -28,11 +28,6 @@ class moodTracker: UIViewController{
         backgroundImage.alpha = 0.7
         self.view.addSubview(backgroundImage)
         
-//        let blur = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
-//        blur.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.2)
-//        self.view.addSubview(blur)
-        
-        
         greetingLabel.frame = CGRect(x: 45, y: 25, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
@@ -42,6 +37,7 @@ class moodTracker: UIViewController{
         greetingLabel.shadowColor = .black
         greetingLabel.shadowOffset = CGSize(width: -2, height: 2)
         self.view.addSubview(greetingLabel)
+        
         let swipeRight = UISwipeGestureRecognizer(target: self, action:#selector(self.swipeRight(_:)))
         swipeRight.direction = UISwipeGestureRecognizer.Direction.right
         self.view.addGestureRecognizer(swipeRight)
@@ -49,6 +45,7 @@ class moodTracker: UIViewController{
         //moodValues = [1,2,3,4,5,6]
         setUpPieChart()
         //pieChart.update
+        
         let backButton = UIButton()
         backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
         backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
@@ -66,6 +63,7 @@ class moodTracker: UIViewController{
         resetTrakerButton.layer.borderWidth = 2
         resetTrakerButton.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         resetTrakerButton.addTarget(self, action:#selector(self.resetPressed), for: .touchUpInside)
+        
         if(!moodValues.isEmpty)
         {
             self.view.addSubview(resetTrakerButton)
@@ -111,6 +109,7 @@ class moodTracker: UIViewController{
         self.resetView.addSubview(b2)
         self.view.addSubview(resetView)
         resetView.alpha = 0.0
+        
         UIView.animate(withDuration: 0.5, animations: {
             self.pieChart.frame = CGRect(x: 10, y: 180, width: self.view.bounds.width - 20, height: self.view.bounds.height / 1.5)
             self.resetTrakerButton.alpha = 0.0
@@ -139,6 +138,7 @@ class moodTracker: UIViewController{
         pieChart.removeFromSuperview()
         noDataView()
     }
+    
     @objc func noReset()
     {
         
@@ -146,6 +146,7 @@ class moodTracker: UIViewController{
         resetView = UIView()
         moveBack()
     }
+    
     func moveBack()
     {
         UIView.animate(withDuration: 0.5, animations: {
@@ -153,6 +154,7 @@ class moodTracker: UIViewController{
             self.resetTrakerButton.alpha = 1.0
             })
     }
+    
     @objc func backButtonPressed()
     {
         let animation = CATransition()
@@ -163,6 +165,7 @@ class moodTracker: UIViewController{
         
         self.dismiss(animated: false, completion: nil)
     }
+    
     func setUpPieChart()
     {
         if(theMoods.count > 0)
@@ -234,10 +237,9 @@ class moodTracker: UIViewController{
         label.backgroundColor = .clear
         self.view.addSubview(label)
     }
+    
     func getColorSet() -> [UIColor]
     {
-        //["Happy","Bored","Frustrated","Angry","Lonely","Stressed","Anxious","Sad","Depressed"]
-        //let colors = [#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1),#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1),#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1),#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1),#colorLiteral(red: 0.9098039269, green: 0.4784313738, blue: 0.6431372762, alpha: 1)]
         let colors = [#colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1),#colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 1),#colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1),#colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1),#colorLiteral(red: 0.8374180198, green: 0.8374378085, blue: 0.8374271393, alpha: 1),#colorLiteral(red: 0.4513868093, green: 0.9930960536, blue: 1, alpha: 1),#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1),#colorLiteral(red: 0, green: 0.3285208941, blue: 0.5748849511, alpha: 1),#colorLiteral(red: 0.004859850742, green: 0.09608627111, blue: 0.5749928951, alpha: 1)]
         var theColors = [UIColor]()
         for i in theMoods
@@ -296,6 +298,7 @@ class moodTracker: UIViewController{
             ctr += 1
         }
     }
+    
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let location = (sender.location(in: pieChart))
         if(location.y >= pieChart.frame.maxY - 100)

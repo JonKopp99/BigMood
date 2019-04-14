@@ -101,11 +101,8 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
             label.textAlignment = .center
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-            //label.adjustsFontSizeToFitWidth = true
             label.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             label.text = "Say hello😁"
-            //label.shadowColor = .black
-            //label.shadowOffset = CGSize(width: -2, height: 2)
             footerView.addSubview(label)
             moodTB.tableFooterView = footerView
         }else{
@@ -115,6 +112,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
 
     func getSavedMessages()
     {
+    //Checks if there are messsages that already exist on the phone and returns them!
         let userDefaults = Foundation.UserDefaults.standard
         let myMessages = (userDefaults.stringArray(forKey: "myMessages") ?? [String]())
         if(!myMessages.isEmpty)
@@ -135,6 +133,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             }
         }
     }
+    
     func saveMessageToPhone(msg: message)
     {
         let userDefaults = Foundation.UserDefaults.standard
@@ -149,8 +148,10 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             userDefaults.set(theirMessages, forKey: "theirMessages")
         }
     }
+    
     @objc func leavePressed()
     {
+        //Clear the chat room if leaving!
         timer.invalidate()
         let ref = Database.database().reference().child("Chats").child(chatID).child(id)
         ref.setValue([])
@@ -167,15 +168,19 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         self.view.window!.layer.add(animation, forKey: nil)
         self.view.window?.rootViewController?.dismiss(animated: false, completion: nil)
     }
+    
     @objc func keyboardWillShow(_ notification: Notification) {
+        //used to get the exact size of the keyboard so we can allign the textBox accordingly
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             self.heightOfKeyboard = keyboardRectangle.height
             self.bringKeyBoardUp()
         }
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var height = CGFloat(40)
+        //Creates height of the msg cell based on the size of the message inside of it
         if(indexPath.row < messages.count)
         {
 
@@ -200,8 +205,6 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         testView.textAlignment = .left
         testView.textColor = .black
         testView.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        //testView.placeholder = "Type here"
-        //testView.returnKeyType = UIReturnKeyType.done
         testView.autocorrectionType = .no
         testView.delegate = self
         testView.backgroundColor = .white
@@ -219,6 +222,8 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        //Checks if we need to change the size of the textfield to fit all the words into it, then
+        //adjusts the views accordingly!
         let msg = UITextView()
         msg.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         msg.frame = CGRect(x: 15, y: 5, width: self.view.bounds.width - 55, height: 40)
@@ -238,11 +243,13 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         moodTB.frame = CGRect(x: 0, y: self.greetingLabel.frame.maxY, width: self.view.bounds.width, height: self.view.bounds.height - (self.greetingLabel.frame.maxY + 60 + self.heightOfKeyboard + height))
         self.scrollToBottom()
     }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         //keyboardView.frame = CGRect(x: 0, y: self.view.bounds.height - 60, width: self.view.bounds.width, height: 60)
         
         testView.frame = CGRect(x: 15, y: 5, width: self.view.bounds.width - 55, height: 40)
     }
+    
     func bringKeyBoardUp()
     {
         UIView.animate(withDuration: 0.3, animations: {
@@ -251,6 +258,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             self.moodTB.frame = CGRect(x: 0, y: self.greetingLabel.frame.maxY, width: self.view.bounds.width, height: self.view.bounds.height - (self.greetingLabel.frame.maxY + 60 + self.heightOfKeyboard))
             })
     }
+    
     func bringKeyBoardDown()
     {
         UIView.animate(withDuration: 0.3, animations: {
@@ -259,6 +267,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             self.moodTB.frame = CGRect(x: 0, y: self.greetingLabel.frame.maxY, width: self.view.bounds.width, height: self.view.bounds.height - (self.greetingLabel.frame.maxY + 60))
         })
     }
+    
     @objc func donePressed()
     {
         testView.resignFirstResponder()
@@ -314,7 +323,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         moodTB.tableFooterView = footerView
         self.scrollToBottom()
     }
-   
+    
     /**
     
     =================================================================================================
@@ -334,7 +343,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
                 Add the new Message to the tableView and then update the messages inside of it.
      
     */
-   
+    
     func getNewMessages()
     {
         //print("Checking for new messages!")
@@ -347,20 +356,22 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
                 return }
             let value = snapshot.value as! [String : AnyObject]
            // print("amount of chaters: ", value.count)
+            //If less then 2 users exit chat! becasue that means user is alone
             if(value.count <= 1)
             {
                 self.timer.invalidate()
                 self.leftTheChat()
                 return
-            }else{
+            }else{//Check for a new message
             for(_, newvalue) in value
             {
                 let theValue = newvalue as! [String : String]
                 let theID = theValue["id"]!
-                if(theID != self.id)
+                if(theID != self.id)//Check if other users ID
                 {
-                    if let newMessage = newvalue["\(self.thereMSGCount)"]!
+                    if let newMessage = newvalue["\(self.thereMSGCount)"]!//Checks if there is a new message in thereMSGCount positon in DB
                     {
+                        //Increment the msgcount and append the message!
                         self.thereMSGCount += 1
                         self.saveMessageToPhone(msg: message(sender: false, msg: newMessage as! String))
                         self.messages.append(message(sender: false, msg: newMessage as! String))
@@ -376,6 +387,7 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             }
         })
     }
+    
     func scrollToBottom(){
         DispatchQueue.main.async {
             if(self.messages.count >= 1)
@@ -409,16 +421,6 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
         self.dismiss(animated: false, completion: nil)
     }
     
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        testView.resignFirstResponder()
-//        messages.append(message(sender: true, msg: testView.text!))
-//        moodTB.beginUpdates()
-//        moodTB.insertRows(at: [IndexPath(row: messages.count - 1, section: 0)], with: .fade)
-//        moodTB.endUpdates()
-//        uploadMsg(msg: testView.text!)
-//        testView.text = ""
-//        return true
-//    }
     func uploadMsg(msg: String)
     {
         let ref = Database.database().reference().child("Chats").child(chatID).child(id).child("\(myMSGCount)")

@@ -17,10 +17,11 @@ class chatVC: UIViewController{
     var chatButton = UIButton()
     var id = String()
     var timer = Timer()
-    var label = UILabel()
-    var koiImage = UIImageView()
+    var label = UILabel()//Chat label
+    var koiImage = UIImageView()//Loading gif
     var status = Bool()//True if timer is running else False
-    var timeRunning = Int()
+    var timeRunning = Int()//Amount of time in the queue
+    
     override func viewWillAppear(_ animated: Bool) {
         checkIfInChatAlready()
     }
@@ -32,9 +33,10 @@ class chatVC: UIViewController{
         backgroundImage.contentMode = .scaleAspectFill
         backgroundImage.alpha = 0.7
         self.view.addSubview(backgroundImage)
+        
         let backgroundView = UIView(frame: backgroundImage.frame)
         backgroundView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.8)
-        //self.view.addSubview(backgroundView)
+        
         greetingLabel.frame = CGRect(x: 45, y: 25, width: self.view.bounds.width - 90, height: 50)
         greetingLabel.textAlignment = .center
         greetingLabel.font = UIFont(name: "AvenirNext-DemiBold", size: 30)
@@ -104,8 +106,10 @@ class chatVC: UIViewController{
             ref.setValue([])
         }
     }
+    
     @objc func chatPressed()
     {
+        //Starts the chat cycle with calling start()
        // print("Pressed")
         
         label = UILabel()
@@ -126,22 +130,24 @@ class chatVC: UIViewController{
     
     func start()
     {
+        //Creates a semi unique id for the user
         id = "\(Int(arc4random_uniform(UInt32(100000))))"
         
         let ref = Database.database().reference().child("Queue").child(id)
-        ref.setValue(["inChat":"false", "id": id, "chatRoom": "nil"])
+        ref.setValue(["inChat":"false", "id": id, "chatRoom": "nil"])//default queue values
+        
         let theHeight = self.view.bounds.width - 40
         koiImage.frame = CGRect(x: 20, y: self.chatButton.frame.maxY, width: self.view.bounds.width - 40, height: theHeight)
-        //let gifImage = UIImage.gifImageWithName("kscsscoi")
-        //koiImage.image = UIImage.gifImageWithName("kscsscoi")
+        
         koiImage.loadGif(name: "kscsscoi")
         koiImage.contentMode = .scaleAspectFit
         
         self.view.addSubview(koiImage)
         scheduledTimerWithTimeInterval()
     }
+    
     func scheduledTimerWithTimeInterval(){
-        // Should stop at certain interval
+        //if timer running is > 10 exit's queue!!! else search for user!
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: {_ in
         self.timeRunning += 2
         if(self.timeRunning <= 10)
@@ -155,6 +161,7 @@ class chatVC: UIViewController{
             }
         })
     }
+    
     func resetView()
     {
         koiImage.removeFromSuperview()
@@ -165,10 +172,12 @@ class chatVC: UIViewController{
         self.view.addSubview(descLabel)
         self.view.addSubview(chatButton)
     }
+    
     func checkIfInChat()->Bool
     {
         //print("Checking if in chat!")
-        let found = false
+        //Checks the DB value inChat if true go to chat room!
+        var found = false
         let ref = Database.database().reference().child("Queue").child(id)
         DispatchQueue.main.async {
         ref.observeSingleEvent(of: .value, with: { snapshot in
@@ -180,6 +189,7 @@ class chatVC: UIViewController{
             let foundString = theValue["inChat"]!
             if(foundString == "true")
             {
+                found = true
                 self.timer.invalidate()
                 self.goToChat()
             }
@@ -187,6 +197,7 @@ class chatVC: UIViewController{
         }
         return found
     }
+
     func searchForUser()
     {
         //print("Searching for user!")
@@ -198,13 +209,17 @@ class chatVC: UIViewController{
                 return }
             let value = snapshot.value as! [String : AnyObject]
             //print("Count of QUEUES: ", value.count)
+            //Goes through the values inside the queue of users!
             for(_, newvalue) in value
             {
                 let theValue = newvalue as! [String : String]
                 let theID = theValue["id"]!
+                //if the id is not our own, connect into a chat room!
                 if(theID != self.id)
                 {
                     //print("Found new user with ID: ", theID)
+                    //Sets the default values to reflect users have chat room now
+                    //Creates a chatRoom with the id's of both user's added together
                     var chatRoomID = Int(self.id)!
                     chatRoomID += Int(theID)!
                     let newRef = Database.database().reference().child("Queue").child(theID)
@@ -218,6 +233,7 @@ class chatVC: UIViewController{
         })
         }
     }
+    
     func goToChat()
     {
         timer.invalidate()
@@ -270,6 +286,7 @@ class chatVC: UIViewController{
         exitQueue()
         self.dismiss(animated: false, completion: nil)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         exitQueue()
     }

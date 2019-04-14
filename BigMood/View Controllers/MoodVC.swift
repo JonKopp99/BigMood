@@ -27,14 +27,15 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0.4196078431, green: 0.3764705882, blue: 1, alpha: 1)
-        //print("CURRENT MOOD", mood)
         backgroundImage.image = #imageLiteral(resourceName: "blurredBackground")
         backgroundImage.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         backgroundImage.contentMode = .scaleAspectFill
         self.view.addSubview(backgroundImage)
+        
         moodTB.dataSource = self
         moodTB.delegate = self
         moodTB.register(moodCell.self, forCellReuseIdentifier: "moodCell")
+        
         greetinglabelView.backgroundColor = .clear
         self.greetinglabelView.alpha = 0.0
         greetinglabelView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 90)
@@ -60,14 +61,14 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         moodTB.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height - greetinglabelView.frame.maxY - 5)
         moodTB.separatorStyle = .none
         moodTB.backgroundColor = .clear
+        
         DispatchQueue.main.async {
             self.getVideos()
             self.getArticles()
         }
         
-        
-        
         setUpFooterView()
+        
         backButton = UIButton()
         backButton.frame = CGRect(x: 5, y: greetingLabel.frame.minY + 12.5, width: 25, height: 25)
         backButton.setImage(#imageLiteral(resourceName: "icons8-undo-52"), for: .normal)
@@ -76,7 +77,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         self.greetinglabelView.addSubview(backButton)
     }
     
-    
+    //Changes the tableViews color based on the emotion selected
     func setScrollIndicatorColor(color: UIColor) {
         for view in self.moodTB.subviews {
             if view.isKind(of: UIImageView.self),
@@ -89,6 +90,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         self.moodTB.flashScrollIndicators()
     }
+    
     @objc func backButtonPressed()
     {
         let animation = CATransition()
@@ -99,10 +101,13 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         self.dismiss(animated: false, completion: nil)
     }
+    
     func setUpFooterView()
     {
         let theView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50))
         theView.backgroundColor = .clear
+        
+        //Load More Button
         let b = UIButton()
         b.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 0, width: 200, height: 40.0)
         b.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 25)
@@ -115,6 +120,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         b.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         b.addTarget(self, action:#selector(self.loadMorePressed), for: .touchUpInside)
         theView.addSubview(b)
+        
+        //Submit video/article button
         let b2 = UIButton()
         b2.frame = CGRect(x: self.view.bounds.width / 2  + 105, y: 0, width: 40.0, height: 40.0)
         b2.setImage(#imageLiteral(resourceName: "icons8-plus-50 (1)"), for: .normal)
@@ -122,23 +129,24 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         theView.addSubview(b2)
         self.moodTB.tableFooterView = theView
         
+        //Adds hotlines if its a troublesome emotion
         if(mood == "Sad" || mood == "Depressed")
         {
             theView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
+            
             let b3 = UIButton()
             b3.frame = CGRect(x: self.view.bounds.width / 2  - 100, y: 50, width: 200, height: 40.0)
             b3.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
             b3.setTitle("Immediate Help", for: .normal)
             b3.setTitleColor(#colorLiteral(red: 0.7540688515, green: 0.7540867925, blue: 0.7540771365, alpha: 1), for: .normal)
             b3.titleLabel?.adjustsFontSizeToFitWidth = true
-            //b3.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1).withAlphaComponent(0.2)
-            //b3.layer.cornerRadius = 20
-            //b3.layer.borderWidth = 2
-            //b3.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             b3.addTarget(self, action:#selector(self.immediateHelpPressed), for: .touchUpInside)
+            
             theView.addSubview(b3)
+            
         }
     }
+    
     @objc func immediateHelpPressed()
     {
         let vc = immediateHelpVC()
@@ -147,11 +155,12 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         animation.subtype = .fromBottom
         animation.duration = 0.6
         self.view.window!.layer.add(animation, forKey: nil)
+        
         self.present(vc, animated: false, completion: nil)
     }
+    
     @objc func addButtonPressed()
     {
-        //print("Add Button Pressed")
         let vc = userSubmit()
         vc.mood = mood
         let animation = CATransition()
@@ -159,32 +168,40 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         animation.subtype = .fromBottom
         animation.duration = 0.6
         self.view.window!.layer.add(animation, forKey: nil)
-        self.present(vc, animated: false, completion: nil)
         
+        self.present(vc, animated: false, completion: nil)
     }
+    
     @objc func loadMorePressed()
     {
-       // print("Pressed")
+        //Changes the cells video and article to have a new random resource
+        //then it refreshed the tableView
         let cell1 = tableView(moodTB, cellForRowAt: IndexPath(row: 0, section: 0)) as! moodCell
         let cell2 = tableView(moodTB, cellForRowAt: IndexPath(row: 1, section: 0)) as! moodCell
+        
         videoID = videos[Int(arc4random_uniform(UInt32(videos.count)))]
+        
         cell1.videoLink = videoID
         cell1.video = true
         cell2.video = false
+        
         articleLink = articles[Int(arc4random_uniform(UInt32(articles.count)))]
         cell2.articleLink = articleLink
+        
         moodTB.reloadRows(at: [IndexPath(row: 0, section: 0),IndexPath(row: 1, section: 0)], with: .fade)
         moodTB.reloadData()
         moodTB.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         
     }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if(mood == "Sad")
+        if(mood == "Sad" || mood == "Depressed")
         {
             return 100
         }
         return 50
     }
+    
     func moveLabels()
     {
         UIView.animate(withDuration: 0.7, animations: {
@@ -196,9 +213,11 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 })
         })
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         moveLabels()
     }
+    
     @objc func swipeRight(_ sender: UISwipeGestureRecognizer){
         let animation = CATransition()
         animation.type = .fade
@@ -215,11 +234,13 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moodCell") as! moodCell
+        
+        //Video Cell
         if(indexPath.row == 0)
         {
             cell.video = true
             cell.videoLink = videoID
-        }else{
+        }else{//Article cell
             cell.video = false
             cell.articleLink = articleLink
             let fullscreenButton = UIButton(frame: CGRect(x: self.view.bounds.width - 85, y: 0, width: 35, height: 35))
@@ -235,9 +256,10 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return cell
         
     }
+    
     @objc func fullScreenPressed()
     {
-        
+        //Brings article view to fullscreen
         articleFullView.frame = CGRect(x: 0, y: self.view.bounds.height, width: self.view.bounds.width, height: self.view.bounds.height)
         let minimizeButton = UIButton()
         minimizeButton.frame = CGRect(x: self.view.bounds.width - 50, y: 35, width: 35, height: 35)
@@ -260,6 +282,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.articleFullView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
             })
     }
+    
     @objc func minimizeButtonPressed(_ sender : UIButton)
     {
         UIView.animate(withDuration: 1, animations: {
@@ -271,9 +294,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             self.articleFullView.removeFromSuperview()
             
         })
-        
-        
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(indexPath.row >= 1 )
         {
@@ -285,8 +307,8 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     func getVideos()
     {
         let ref = Database.database().reference().child("Moods").child(mood).child("videos")
+        
         DispatchQueue.main.async {
-            
         ref.observeSingleEvent(of: .value, with: { snapshot in
             
             if !snapshot.exists() {
@@ -301,6 +323,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         })
         }
     }
+    
     func getArticles()
     {
         
@@ -316,6 +339,7 @@ class MoodVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             {
                 self.articles.append(value)
             }
+            
             self.moodTB.reloadData()
             self.view.addSubview(self.moodTB)
             self.setScrollIndicatorColor(color: self.color)
