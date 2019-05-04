@@ -140,6 +140,7 @@ class userSubmit: UIViewController, UIPickerViewDelegate, UITextFieldDelegate{
         inputText.placeholder = "Enter article link"
         inputText.adjustsFontSizeToFitWidth = false
         inputText.returnKeyType = UIReturnKeyType.done
+        inputText.delegate = self
         self.view.addSubview(inputText)
         
         b3.removeFromSuperview()
