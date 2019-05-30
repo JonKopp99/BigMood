@@ -113,10 +113,8 @@ class NewLaunchVC: UIViewController{
         self.view.addSubview(menuView)
         menuView.alpha = 1.0
         setUpMenu()
-        //scheduledTimerWithTimeInterval()
         moveLabels()
         
-        //uplaodTemp()
         
         
         
