@@ -192,7 +192,6 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
             //msg.sizeToFit()
             height = msg.sizeThatFits(CGSize(width: msg.frame.width, height: CGFloat.greatestFiniteMagnitude)).height + 10
         }
-        //print(height)
         return height
     }
     
@@ -245,7 +244,6 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        //keyboardView.frame = CGRect(x: 0, y: self.view.bounds.height - 60, width: self.view.bounds.width, height: 60)
         
         testView.frame = CGRect(x: 15, y: 5, width: self.view.bounds.width - 55, height: 40)
     }
@@ -294,7 +292,6 @@ class messagesVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UIT
     }
     func leftTheChat()
     {
-        //print("Left the chat")
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100))
         let label = UILabel()
         label.frame = CGRect(x: 45, y: 10, width: self.view.bounds.width - 90, height: 50)
